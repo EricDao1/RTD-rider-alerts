@@ -13,11 +13,9 @@ class RTDAlertAttribute(
     override fun toString(): String {
         var sb = StringBuilder()
 
-        if (this.alerts != null) {
-            for (value in this.alerts) {
-                sb.append(value)
-                sb.append("\n\n")
-            }
+        for (value in this.alerts) {
+            sb.append(value)
+            sb.append("\n\n")
         }
         return sb.toString()
     }

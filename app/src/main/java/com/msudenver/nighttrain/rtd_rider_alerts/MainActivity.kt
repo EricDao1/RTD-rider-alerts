@@ -1,12 +1,14 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.room.Room
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         },
             Response.ErrorListener { error -> textView.text = error.toString() }
         )
+
+        val db = RTDDatabase(this)
         /*val stringRequest = JsonObjectRequest(Request.Method.GET, url, null, Response.Listener { response ->
                 textView.text = response.toString().substring(0, 500)
             },

@@ -58,6 +58,7 @@ class RouteEntityTest {
         Truth.assertThat(routeRetrieve[0]).isNotEqualTo(0)
         route0.id = routeRetrieve[0].id
 
+        //confirm "bus" route (route_type of 1) is not picked up
         Truth.assertThat(routeRetrieve[0]).isEqualTo(route0)
         Truth.assertThat(routeRetrieve.size).isEqualTo(1)
     }
