@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CalendarEntity(
-    @PrimaryKey var id: Int,
+    @PrimaryKey var id: String,
     @ColumnInfo(name ="monday") var monday: Int,
     @ColumnInfo(name ="tuesday") var tuesday: Int,
     @ColumnInfo(name ="wednesday") var wednesday: Int,

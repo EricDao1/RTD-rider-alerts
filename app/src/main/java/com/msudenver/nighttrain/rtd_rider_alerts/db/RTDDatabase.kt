@@ -1,7 +1,9 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 
+import android.content.Context
 import androidx.room.Database
+import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
@@ -19,4 +21,17 @@ abstract class RTDDatabase : RoomDatabase() {
     abstract fun stopDao(): StopDao
     abstract fun stopTimeDao(): StopTimeDao
     abstract fun tripDao(): TripDao
+
+    companion object {
+        @Volatile private var instance: RTDDatabase? = null
+        private val LOCK = Any()
+
+        operator fun invoke(context: Context)= instance ?: synchronized(LOCK){
+            instance ?: buildDatabase(context).also {instance = it}
+        }
+
+        private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
+            RTDDatabase::class.java, "rtd.db")
+            .build()
+    }
 }
