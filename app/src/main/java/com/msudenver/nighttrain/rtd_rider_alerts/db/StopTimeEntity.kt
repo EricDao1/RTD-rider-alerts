@@ -15,7 +15,7 @@ import java.util.*
     ]
 )
 data class StopTimeEntity(
-    @PrimaryKey var id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int=0,
     @TypeConverters(TimeConverters::class)
     @ColumnInfo(name ="arrival_time")
     var arrivalTime: Date,
@@ -24,8 +24,7 @@ data class StopTimeEntity(
     var departureTime: Date,
     @ColumnInfo(name = "stop_id") var stopId: Int,
     @ColumnInfo(name = "trip_id") var tripId: Int,
-    @ColumnInfo(name = "stop_sequence") var stopSequence: Int,
-    @ColumnInfo(name = "trip_header") var tripHeader: String
+    @ColumnInfo(name = "stop_sequence") var stopSequence: Int
     )
 
 class TimeConverters {

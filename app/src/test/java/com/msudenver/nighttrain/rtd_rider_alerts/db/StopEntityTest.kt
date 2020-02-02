@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import org.bouncycastle.asn1.x500.style.RFC4519Style.name
 import org.junit.After
 import org.junit.Before
 
@@ -16,11 +17,11 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RouteEntityTest {
+class StopEntityTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private lateinit var routeDao: RouteDao
+    private lateinit var stopDao: StopDao
     private lateinit var db: RTDDatabase
     private val context: Context = ApplicationProvider.getApplicationContext()
 
@@ -28,7 +29,7 @@ class RouteEntityTest {
     fun setUp() {
         db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
-        routeDao = db.routeDao()
+        stopDao = db.stopDao()
     }
 
     @After
@@ -37,27 +38,27 @@ class RouteEntityTest {
     }
 
     @Test
-    fun simpleInsertRecall() {
-        val route1 = RouteEntity(
-            id="A",
-            name="A",
-            type=1,
-            backgroundColor=0xFFFFFF,
-            textColor = 0XD11D11
+    fun insertRead() {
+        val stop1 = StopEntity(
+            id=23043,
+            name="10th & Osage Station",
+            lat = "39.732222",
+            lon = "-105.005654"
         )
-        val route0 = RouteEntity(
-            id="113B",
-            name="B",
-            type=0,
-            backgroundColor=0xFFFFF0,
-            textColor = 0XD11D1F
-        )
-        routeDao.insertAll(route1)
-        routeDao.insertAll(route0)
-        val routeRetrieve = routeDao.getTrainRoutes()
 
-        //confirm "bus" route (route_type of 1) is not picked up
-        Truth.assertThat(routeRetrieve[0]).isEqualTo(route0)
-        Truth.assertThat(routeRetrieve.size).isEqualTo(1)
+        val stop2 = StopEntity(
+            id=23059,
+            name="10th & Osage Station",
+            lat = "39.732222",
+            lon = "-105.005654",
+            parentStation=34109
+        )
+        stopDao.insertAll(stop1, stop2)
+
+        val returnedStops = stopDao.getTrainStops()
+
+        Truth.assertThat(returnedStops[0]).isEqualTo(stop2)
+        Truth.assertThat(returnedStops[0].id).isEqualTo(stop2.id)
+
     }
 }
