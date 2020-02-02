@@ -22,6 +22,19 @@ interface StopTimeDao {
             "LIMIT :maxResults")
     fun getNextTrains(time: Date, scheduleType: String, stopId: Int, maxResults: Int) : List<ScheduledTrain>
 
+    @Query("SELECT trip_id FROM stoptimeentity " +
+            "INNER JOIN tripentity ON trip_id=tripentity.id " +
+            "INNER JOIN routeentity ON route_id=routeentity.id" +
+            " INNER JOIN stopentity ON stop_id=stopentity.id" +
+            " WHERE route_short_name = :routeName" +
+            " AND arrival_time >= :startTime" +
+            " AND arrival_time <= :endTime" +
+            " AND service_id = :dayOfWeek" +
+            " AND stop_name = :startStation" +
+            " LIMIT 1"
+    )
+    fun getCancelledTrip(dayOfWeek:String, startTime:Date, endTime:Date, routeName: String, startStation: String) : Int //Ridgegate Parkway Station
+
     @Insert
     fun insertAll(vararg stopTime: StopTimeEntity)
 

@@ -11,7 +11,7 @@ import androidx.room.TypeConverters
 //https://developer.android.com/reference/androidx/room/package-summary.html
 
 @Database(
-    entities = [CalendarEntity::class, RouteEntity::class, StopEntity::class, StopTimeEntity::class, TripEntity::class],
+    entities = [CalendarEntity::class, RouteEntity::class, StopEntity::class, StopTimeEntity::class, TripEntity::class, CancelledTripEntity::class],
     version = 1
 )
 @TypeConverters(TimeConverters::class)
@@ -21,6 +21,7 @@ abstract class RTDDatabase : RoomDatabase() {
     abstract fun stopDao(): StopDao
     abstract fun stopTimeDao(): StopTimeDao
     abstract fun tripDao(): TripDao
+    abstract fun cancelledTripDao(): CancelledTripDao
 
     companion object {
         @Volatile private var instance: RTDDatabase? = null
