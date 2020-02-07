@@ -67,7 +67,8 @@ class TripEntityTest {
             id=113107684,
             routeId="113B",
             description="C-Line Union Station",
-            serviceId = "FR"
+            serviceId = "FR",
+            directionId = 0
         )
         tripDao.insertAll(tripEntity1)
 

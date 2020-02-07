@@ -82,12 +82,12 @@ class StopTimeEntityTest {
             stopSequence=8
         )
 
-        val stop = StopEntity(id=23043, name="10th & Osage Station", lat="", lon="", parentStation = 34109)
-        val tripEntity1 = TripEntity(id=113107684, routeId="101C", description="C-Line Union Station", serviceId = "FR")
+        val stop = StopEntity(id=23043, name="10th & Osage Station", lat="", lon="", parentStation = 34109, description = "Vehicles Travelling West")
+        val tripEntity1 = TripEntity(id=113107684, routeId="101C", description="C-Line Union Station", serviceId = "FR", directionId = 0)
         val scheduledTrainExpected = ScheduledTrain()
 
-        scheduledTrainExpected.routeColor = 0xFFFFF0
-        scheduledTrainExpected.routeTextColor = 0XD11D1F
+        scheduledTrainExpected.routeColor = 0xF79239
+        scheduledTrainExpected.routeTextColor = 0xFFFFFF
         scheduledTrainExpected.time = Date(1970,1,1,10,1,30)
         scheduledTrainExpected.trainName = "C"
         scheduledTrainExpected.tripHeader = "C-Line Union Station"
@@ -107,29 +107,29 @@ class StopTimeEntityTest {
     @Test
     fun findCancelledTrain() {
 
-        val trip1 = TripEntity(id=113109947,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip2 = TripEntity(id=113109953,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip3 = TripEntity(id=113109956,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip4 = TripEntity(id=113109959,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip5 = TripEntity(id=113109962,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip6 = TripEntity(id=113109967,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip7 = TripEntity(id=113109968,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip8 = TripEntity(id=113109973,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip9 = TripEntity(id=113109976,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip10 = TripEntity(id=113109979,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip11 = TripEntity(id=113109981,description="E-Line Union Station", routeId="101E", serviceId="SU")
-        val trip12 = TripEntity(id=113109247,description="E-Line Union Station", routeId="101E", serviceId="SA")
-        val trip13 = TripEntity(id=113109605,description="E-Line RidgeGate", routeId="101E", serviceId="SA")
-        val trip14 = TripEntity(id=113110087,description="E-Line RidgeGate", routeId="101E", serviceId="SU")
-        val trip15 = TripEntity(id=113107809,description="F-Line 18th & California", routeId="101F", serviceId="FR")
-        val trip16 = TripEntity(id=113108347,description="F-Line RidgeGate", routeId="101F", serviceId="FR")
-        val trip17 = TripEntity(id=113108518,description="F-Line 18th & California", routeId="101F", serviceId="MT")
-        val trip18 = TripEntity(id=113108917,description="F-Line RidgeGate", routeId="101F", serviceId="MT")
+        val trip1 = TripEntity(id=113109947,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip2 = TripEntity(id=113109953,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip3 = TripEntity(id=113109956,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip4 = TripEntity(id=113109959,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip5 = TripEntity(id=113109962,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip6 = TripEntity(id=113109967,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip7 = TripEntity(id=113109968,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip8 = TripEntity(id=113109973,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip9 = TripEntity(id=113109976,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip10 = TripEntity(id=113109979,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip11 = TripEntity(id=113109981,description="E-Line Union Station", routeId="101E", serviceId="SU", directionId = 0)
+        val trip12 = TripEntity(id=113109247,description="E-Line Union Station", routeId="101E", serviceId="SA", directionId = 0)
+        val trip13 = TripEntity(id=113109605,description="E-Line RidgeGate", routeId="101E", serviceId="SA", directionId = 0)
+        val trip14 = TripEntity(id=113110087,description="E-Line RidgeGate", routeId="101E", serviceId="SU", directionId = 0)
+        val trip15 = TripEntity(id=113107809,description="F-Line 18th & California", routeId="101F", serviceId="FR", directionId = 0)
+        val trip16 = TripEntity(id=113108347,description="F-Line RidgeGate", routeId="101F", serviceId="FR", directionId = 0)
+        val trip17 = TripEntity(id=113108518,description="F-Line 18th & California", routeId="101F", serviceId="MT", directionId = 0)
+        val trip18 = TripEntity(id=113108917,description="F-Line RidgeGate", routeId="101F", serviceId="MT", directionId = 0)
 
         tripDao.insertAll(trip1,trip2, trip3, trip4, trip5, trip6, trip7, trip8, trip9, trip10, trip11, trip12, trip13, trip14, trip15, trip16, trip17, trip18)
 
-        val stop0 = StopEntity(id=35211, name="Ridgegate Parkway Station", lat="39.520244", lon="-104.865725", parentStation=35245)
-        val stop1 = StopEntity(id=35212, name="Ridgegate Parkway Station", lat="39.520791", lon="-104.86521", parentStation=35245)
+        val stop0 = StopEntity(id=35211, name="Ridgegate Parkway Station", lat="39.520244", lon="-104.865725", parentStation=35245, description = "Vehicles Travelling West")
+        val stop1 = StopEntity(id=35212, name="Ridgegate Parkway Station", lat="39.520791", lon="-104.86521", parentStation=35245, description = "Vehicles Travelling West")
 
         stopDao.insertAll(stop0, stop1)
 

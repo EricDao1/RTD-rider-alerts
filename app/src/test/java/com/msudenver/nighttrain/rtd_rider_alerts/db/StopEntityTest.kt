@@ -41,6 +41,7 @@ class StopEntityTest {
     fun insertRead() {
         val stop1 = StopEntity(
             id=23043,
+            description = "Vehicle Travelling West",
             name="10th & Osage Station",
             lat = "39.732222",
             lon = "-105.005654"
@@ -49,6 +50,7 @@ class StopEntityTest {
         val stop2 = StopEntity(
             id=23059,
             name="10th & Osage Station",
+            description = "Vehicle Travelling West",
             lat = "39.732222",
             lon = "-105.005654",
             parentStation=34109
