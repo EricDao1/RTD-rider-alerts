@@ -1,5 +1,7 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
+import java.util.*
+
 class RTDAlert(
     var category: String = "",
     var info: String = "",
@@ -10,7 +12,4 @@ class RTDAlert(
         return "Info" + info + "startDate: " + startDate + "endDate: " + endDate
     }
 
-    /*fun parseStations() : List<RTDStationTimeAlert> {
-        val stations : List<String> = info.split("<br>")
-    }*/
 }

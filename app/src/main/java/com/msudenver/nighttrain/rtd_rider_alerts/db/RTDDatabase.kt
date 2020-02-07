@@ -2,6 +2,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 
 import android.content.Context
+import androidx.annotation.NonNull
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -33,6 +34,7 @@ abstract class RTDDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
             RTDDatabase::class.java, "rtd.db")
+            //.createFromAsset("database/rtd.db")
             .build()
     }
 }
