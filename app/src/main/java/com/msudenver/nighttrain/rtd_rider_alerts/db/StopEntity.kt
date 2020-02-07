@@ -10,5 +10,6 @@ data class StopEntity(
     @ColumnInfo(name = "stop_name") var name: String,
     @ColumnInfo(name = "stop_lat") var lat: String,
     @ColumnInfo(name = "stop_lon") var lon: String,
+    @ColumnInfo(name = "stop_desc") var description: String,
     @ColumnInfo(name = "parent_station") var parentStation: Int=0
 )

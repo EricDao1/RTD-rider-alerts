@@ -18,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service android:name="com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertService" android:exported="false" android:enabled="true"/>
         <uses-library android:name="android.test.runner" android:required="false" />
         <uses-library android:name="android.test.base"
                 android:required="false" />

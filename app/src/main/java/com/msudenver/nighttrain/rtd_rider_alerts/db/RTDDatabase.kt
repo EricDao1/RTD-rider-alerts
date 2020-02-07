@@ -34,7 +34,7 @@ abstract class RTDDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
             RTDDatabase::class.java, "rtd.db")
-            //.createFromAsset("database/rtd.db")
+            .createFromAsset("rtd.db")
             .build()
     }
 }

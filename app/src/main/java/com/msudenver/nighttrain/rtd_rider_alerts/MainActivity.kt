@@ -1,17 +1,11 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,12 +26,13 @@ class MainActivity : AppCompatActivity() {
         /*val requestQueue = Volley.newRequestQueue(this)
 
         val alertsRequest = GsonRequest(url, RTDAlertData::class.java, null, Response.Listener {
-            response -> textView.text =response.toString()
+            response -> Log.v("DL", RTDStationTimeAlert.toRTDStationTime(response.toString(),"C").map(a -> a.toString()))
         },
             Response.ErrorListener { error -> textView.text = error.toString() }
         )*/
 
-        val db = RTDDatabase(this)
+        startService(Intent(this,RiderAlertService::class.java))
+        Log.v("FML", "started runnable??")
         /*val stringRequest = JsonObjectRequest(Request.Method.GET, url, null, Response.Listener { response ->
         val stringRequest = JsonObjectRequest(Request.Method.GET, url, null, Response.Listener { response ->
                 textView.text = response.toString().substring(0, 500)
@@ -47,10 +42,5 @@ class MainActivity : AppCompatActivity() {
         stringRequest.tag = tag
         requestQueue.add(alertsRequest)*/
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-        //requestQueue.cancelAll(tag)
     }
 }

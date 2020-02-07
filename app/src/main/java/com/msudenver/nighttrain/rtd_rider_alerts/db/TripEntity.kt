@@ -21,5 +21,6 @@ data class TripEntity(
     @PrimaryKey var id: Int,
     @ColumnInfo(name ="trip_headsign") var description: String,
     @ColumnInfo(name ="route_id") var routeId: String,
-    @ColumnInfo(name ="service_id") var serviceId: String
+    @ColumnInfo(name ="service_id") var serviceId: String,
+    @ColumnInfo(name ="direction_id") var directionId: Int
 )
