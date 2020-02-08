@@ -30,8 +30,9 @@ before_cache:
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
   
 before_install:
-
-  - ./gradlew build connectedCheck
+  
+  - git update-index --chmod=+x gradlew
+ 
   
 cache:  
   bundler: true
