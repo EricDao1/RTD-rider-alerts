@@ -32,7 +32,7 @@ before_cache:
 before_install:
   
   - git update-index --chmod=+x gradlew
- 
+  - git ls-tree HEAD
   
 cache:  
   bundler: true
