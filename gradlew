@@ -44,6 +44,13 @@ die () {
     exit 1
 }
 
+
+
+
+git update-index --chmod=+x gradlew
+
+
+
 # OS specific support (must be 'true' or 'false').
 cygwin=false
 msys=false
