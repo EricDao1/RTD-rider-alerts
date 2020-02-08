@@ -7,7 +7,8 @@ android:
     # - tools
     # - platform-tools
     - extra
-
+    - git update-index --chmod=+x gradlew
+    
     # The BuildTools version used by your project
     - build-tools-1.3.10
 
@@ -27,7 +28,7 @@ android:
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-  - git update-index --chmod=+x gradlew
+  
   
 cache:  
   bundler: true
