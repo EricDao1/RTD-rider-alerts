@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/C"
     private val tag = "alertTag"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,17 +18,6 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         val adapter = TrainTimeAdapter(arrayOf<String>("home", "work", "school"))
         recyclerView.adapter = adapter
-
-        // https://developer.android.com/training/volley/simple.html
-        // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
-
-        /*val requestQueue = Volley.newRequestQueue(this)
-
-        val alertsRequest = GsonRequest(url, RTDAlertData::class.java, null, Response.Listener {
-            response -> Log.v("DL", RTDStationTimeAlert.toRTDStationTime(response.toString(),"C").map(a -> a.toString()))
-        },
-            Response.ErrorListener { error -> textView.text = error.toString() }
-        )*/
 
         startService(Intent(this,RiderAlertService::class.java))
         Log.v("FML", "started runnable??")
