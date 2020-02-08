@@ -9,6 +9,8 @@ class RiderAlertUtils {
     var routeName : String = ""
     var startTime : Date = Date()
 
+    override fun toString() : String = "$fromStation via $routeName at $startTime"
+
     companion object {
         //Function to split large delay into individual strings of delayed trains:
         /*Input :
