@@ -32,6 +32,9 @@ before_cache:
 before_install:
   - chmod +x gradlew
   
+script:
+ - chmod +x ./gradlew build connectedCheck
+  
 cache:  
   bundler: true
   directories:
