@@ -10,10 +10,10 @@ env:
   
 sudo: false
 
-addons:
-  apt:
-    packages:
-      -tree
+# addons:
+#  apt:
+#    packages:
+#      -tree
       
 before_install:
   -rvm install 1.3.10
