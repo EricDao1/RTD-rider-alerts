@@ -96,7 +96,7 @@ class StopTimeEntityTest {
         tripDao.insertAll(tripEntity1)
         stopTimeDao.insertAll(stopTime)
 
-        val scheduledTrain = stopTimeDao.getNextTrains(maxResults = 1,scheduleType = "FR",stopId = 23043,time=Date(1970,1,1,10,0,0))
+        val scheduledTrain = stopTimeDao.getNextTrains(maxResults = 1,scheduleType = "friday",stopId = 23043,time=Date(1970,1,1,10,0,0))
         Truth.assertThat(scheduledTrain[0].time).isEqualTo(scheduledTrainExpected.time)
         Truth.assertThat(scheduledTrain[0].routeColor).isEqualTo(scheduledTrainExpected.routeColor)
         Truth.assertThat(scheduledTrain[0].routeTextColor).isEqualTo(scheduledTrainExpected.routeTextColor)
@@ -133,18 +133,18 @@ class StopTimeEntityTest {
 
         stopDao.insertAll(stop0, stop1)
 
-        val stopTime1 = StopTimeEntity(tripId=113107809, arrivalTime=Date(1970,1,1,15,42,0), departureTime = Date(1970,1,1,15,42,0), stopId=35212, stopSequence=1)
-        val stopTime2 = StopTimeEntity(tripId=113108347, arrivalTime=Date(1970,1,1,15,40,15), departureTime = Date(1970,1,1,15,40,15), stopId=35211, stopSequence=22)
-        val stopTime3 = StopTimeEntity(tripId=113108518, arrivalTime=Date(1970,1,1,15,42,0), departureTime = Date(1970,1,1,15,42,0), stopId=35212, stopSequence=1)
-        val stopTime4 = StopTimeEntity(tripId=113108917, arrivalTime=Date(1970,1,1,15,40,15), departureTime = Date(1970,1,1,15,40,15), stopId=35211, stopSequence=22)
-        val stopTime5 = StopTimeEntity(tripId=113109247, arrivalTime=Date(1970,1,1,15,41,0), departureTime = Date(1970,1,1,15,41,0), stopId=35212, stopSequence=1)
-        val stopTime6 = StopTimeEntity(tripId=113109605, arrivalTime=Date(1970,1,1,15,41,15), departureTime = Date(1970,1,1,15,41,15), stopId=35211, stopSequence=21)
-        val stopTime7 = StopTimeEntity(tripId=113109956, arrivalTime=Date(1970,1,1,15,41,0), departureTime = Date(1970,1,1,15,41,0), stopId=35212, stopSequence=1)
-        val stopTime8 = StopTimeEntity(tripId=113110087, arrivalTime=Date(1970,1,1,15,41,15), departureTime = Date(1970,1,1,15,41,15), stopId=35211, stopSequence=21)
+        val stopTime1 = StopTimeEntity(tripId=113107809, arrivalTime=Date(70,0,1,15,42,0), departureTime = Date(1970,1,1,15,42,0), stopId=35212, stopSequence=1)
+        val stopTime2 = StopTimeEntity(tripId=113108347, arrivalTime=Date(70,0,1,15,40,15), departureTime = Date(1970,1,1,15,40,15), stopId=35211, stopSequence=22)
+        val stopTime3 = StopTimeEntity(tripId=113108518, arrivalTime=Date(70,0,1,15,42,0), departureTime = Date(1970,1,1,15,42,0), stopId=35212, stopSequence=1)
+        val stopTime4 = StopTimeEntity(tripId=113108917, arrivalTime=Date(70,0,1,15,40,15), departureTime = Date(1970,1,1,15,40,15), stopId=35211, stopSequence=22)
+        val stopTime5 = StopTimeEntity(tripId=113109247, arrivalTime=Date(70,0,1,15,41,0), departureTime = Date(1970,1,1,15,41,0), stopId=35212, stopSequence=1)
+        val stopTime6 = StopTimeEntity(tripId=113109605, arrivalTime=Date(70,0,1,15,41,15), departureTime = Date(1970,1,1,15,41,15), stopId=35211, stopSequence=21)
+        val stopTime7 = StopTimeEntity(tripId=113109956, arrivalTime=Date(70,0,1,15,41,0), departureTime = Date(1970,1,1,15,41,0), stopId=35212, stopSequence=1)
+        val stopTime8 = StopTimeEntity(tripId=113110087, arrivalTime=Date(70,0,1,15,41,15), departureTime = Date(1970,1,1,15,41,15), stopId=35211, stopSequence=21)
 
         stopTimeDao.insertAll(stopTime1, stopTime2, stopTime3, stopTime4, stopTime5, stopTime6, stopTime7, stopTime8)
 
-        val cancelledTrip = stopTimeDao.getCancelledTrip("SU", Date(1970,1,1,15, 40), Date(1970,1,1,15, 42), "E", "Ridgegate Parkway Station") //"sunday",
+        val cancelledTrip = stopTimeDao.getCancelledTrip("sunday", Date(70,0,1,15, 40), Date(70,0,1,15, 42), "E", "Ridgegate Parkway Station") //"sunday",
         Truth.assertThat(cancelledTrip).isEqualTo(113109956)
     }
 }

@@ -26,10 +26,12 @@ interface StopTimeDao {
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
             "INNER JOIN routeentity ON route_id=routeentity.id" +
             " INNER JOIN stopentity ON stop_id=stopentity.id" +
+            " INNER JOIN calendarentity ON service_id=calendarentity.id" +
             " WHERE route_short_name = :routeName" +
             " AND arrival_time >= :startTime" +
             " AND arrival_time <= :endTime" +
-            " AND service_id = :dayOfWeek" +
+            " AND (CASE :dayOfWeek WHEN 'sunday' THEN sunday WHEN 'monday' THEN monday " +
+            "WHEN 'tuesday' THEN tuesday WHEN 'wednesday' THEN wednesday WHEN 'thursday' THEN thursday WHEN 'saturday' THEN saturday END) = 1" +
             " AND stop_name = :startStation" +
             " LIMIT 1"
     )

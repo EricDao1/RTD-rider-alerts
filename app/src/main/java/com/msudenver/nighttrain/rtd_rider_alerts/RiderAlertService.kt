@@ -75,7 +75,7 @@ class RiderAlertService : Service() {
         requestQueue.add(alertsRequest)
     }
 
-    fun processAlerts(response:RTDAlertData) {
+    private fun processAlerts(response:RTDAlertData) {
         val stopTimeDao = RTDDatabase.invoke(applicationContext).stopTimeDao()
         val cancelDao = RTDDatabase.invoke(applicationContext).cancelledTripDao()
 
