@@ -5,14 +5,14 @@ import androidx.room.*
 @Dao
 interface CalendarDao {
     @Query("SELECT * FROM calendarentity")
-    fun getAll(): List<CalendarEntity>
+    suspend fun getAll(): List<CalendarEntity>
 
     @Insert
-    fun insertAll(vararg calendar: CalendarEntity)
+    suspend fun insertAll(vararg calendar: CalendarEntity)
 
     @Delete
-    fun delete(calendar: CalendarEntity)
+    suspend fun delete(calendar: CalendarEntity)
 
     @Update
-    fun updateCalendar(vararg calendar: CalendarEntity)
+    suspend fun updateCalendar(vararg calendar: CalendarEntity)
 }

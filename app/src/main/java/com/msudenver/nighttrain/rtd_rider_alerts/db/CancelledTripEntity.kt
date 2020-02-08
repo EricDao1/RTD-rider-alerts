@@ -18,6 +18,6 @@ import java.util.*
 
 class CancelledTripEntity(
     @PrimaryKey(autoGenerate = true) var id: Int=0,
-    @ColumnInfo(name="trip_id") var tripId: Int,
+    @ColumnInfo(name="trip_id") var tripId: Int=0,
     @ColumnInfo(name="day_date") var dayDate: Date= Date()
 )

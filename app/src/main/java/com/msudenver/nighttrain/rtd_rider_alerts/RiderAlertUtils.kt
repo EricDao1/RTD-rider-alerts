@@ -36,9 +36,11 @@ class RiderAlertUtils {
         fun parseStationAlert(info: String): RiderAlertUtils {
             val alert = RiderAlertUtils()
             val startTimeMore = info.split(" from ")
-            val lastTrainTime = Date(70,0,1,3,30,0)
+            val lastTrainTime = Date(Date.UTC(70,0,1,3,30,0))
+            //val lastTrainTime = Date(70,0,1,3,30,0)
             try {
                 val simpleDateFormat = SimpleDateFormat("hh:mm aa")
+                simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
                 alert.startTime = simpleDateFormat.parse(startTimeMore[0])
                 when(alert.startTime<lastTrainTime) {
                     true->alert.startTime=Date(alert.startTime.time +  86400000)
@@ -48,8 +50,7 @@ class RiderAlertUtils {
             }
             if(startTimeMore.size > 1) {
                 val fromStationMore = startTimeMore[1].split(" to ")
-                val stripTrack = fromStationMore[0].split(" Track")
-                alert.fromStation = stripTrack[0]
+                alert.fromStation = fromStationMore[0]
             }
             return alert
         }

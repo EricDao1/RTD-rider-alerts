@@ -9,12 +9,12 @@ import java.util.*
 @Dao
 interface CancelledTripDao {
     @Query("SELECT * FROM cancelledtripentity WHERE day_date= :date")
-    fun getTrainsForToday(date: Date) : List<CancelledTripEntity>
+    suspend fun getTrainsForToday(date: Date) : List<CancelledTripEntity>
 
     @Insert
-    fun insertAll(vararg trip: CancelledTripEntity)
+    suspend fun insertAll(vararg trip: CancelledTripEntity)
 
     @Update
-    fun updateAll(vararg trip: CancelledTripEntity)
+    suspend fun updateAll(vararg trip: CancelledTripEntity)
 
 }

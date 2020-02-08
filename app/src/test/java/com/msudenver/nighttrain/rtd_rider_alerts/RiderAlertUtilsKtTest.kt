@@ -12,16 +12,23 @@ class RiderAlertUtilsKtTest {
     @Test
     fun testOneStationParse() {
         val alert = RiderAlertUtils.parseStationAlert("6:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station")
-        Truth.assertThat(alert.fromStation).isEqualTo("Union Station")
-        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,18,49,0))
+        Truth.assertThat(alert.fromStation).isEqualTo("Union Station Track 12")
+        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,11,49,0)) //6:49 pm in UTC time
     }
 
     //RTD does a funny thing where before 3:30 a.m. it is considered the previous day and the time is just > 24 hours, i.e. 24:51
     @Test
     fun testAfterMidnightStationParse() {
         val alert = RiderAlertUtils.parseStationAlert("12:51 am from Union Station Track 12 to Littleton / Mineral Ave Station")
-        Truth.assertThat(alert.fromStation).isEqualTo("Union Station")
-        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,24,51,0))
+        Truth.assertThat(alert.fromStation).isEqualTo("Union Station Track 12")
+        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,17,51,0)) //24:51 in UTC time
+    }
+
+    @Test
+    fun testEarlyMorning() {
+        val alert = RiderAlertUtils.parseStationAlert("5:48 am from Evans Station to Union Station Track 11")
+        Truth.assertThat(alert.fromStation).isEqualTo("Evans Station")
+        Truth.assertThat(alert.startTime.time).isEqualTo(20880000)
     }
 
     @Test
@@ -47,7 +54,7 @@ class RiderAlertUtilsKtTest {
     @Test
     fun getDayOfWeekAfter() {
         val simpleDateFormat = SimpleDateFormat("MMMM dd, yyyy hh:mmaa", Locale.US)
-        val alertStartDate = simpleDateFormat.parse("February 07, 2020 7:11AM")
+        val alertStartDate = simpleDateFormat.parse("February 14, 2020 2:26PM")
 
         val day = RiderAlertUtils.getDayOfWeek(alertStartDate)
 

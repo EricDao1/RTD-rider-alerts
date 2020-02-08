@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bouncycastle.asn1.x500.style.RFC4519Style.name
 import org.junit.After
 import org.junit.Before
@@ -39,28 +41,30 @@ class StopEntityTest {
 
     @Test
     fun insertRead() {
-        val stop1 = StopEntity(
-            id=23043,
-            description = "Vehicle Travelling West",
-            name="10th & Osage Station",
-            lat = "39.732222",
-            lon = "-105.005654"
-        )
+        GlobalScope.launch {
+            val stop1 = StopEntity(
+                id=23043,
+                description = "Vehicle Travelling West",
+                name="10th & Osage Station",
+                lat = "39.732222",
+                lon = "-105.005654"
+            )
 
-        val stop2 = StopEntity(
-            id=23059,
-            name="10th & Osage Station",
-            description = "Vehicle Travelling West",
-            lat = "39.732222",
-            lon = "-105.005654",
-            parentStation=34109
-        )
-        stopDao.insertAll(stop1, stop2)
+            val stop2 = StopEntity(
+                id=23059,
+                name="10th & Osage Station",
+                description = "Vehicle Travelling West",
+                lat = "39.732222",
+                lon = "-105.005654",
+                parentStation=34109
+            )
+            stopDao.insertAll(stop1, stop2)
 
-        val returnedStops = stopDao.getTrainStops()
+            val returnedStops = stopDao.getTrainStops()
 
-        Truth.assertThat(returnedStops[0]).isEqualTo(stop2)
-        Truth.assertThat(returnedStops[0].id).isEqualTo(stop2.id)
+            Truth.assertThat(returnedStops[0]).isEqualTo(stop2)
+            Truth.assertThat(returnedStops[0].id).isEqualTo(stop2.id)
+        }
 
     }
 }

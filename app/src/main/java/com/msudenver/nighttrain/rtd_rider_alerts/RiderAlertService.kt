@@ -11,33 +11,35 @@ import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlinx.coroutines.*
+
 
 //https://developer.android.com/guide/components/services
 class RiderAlertService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
+    private val TAG = "riderService"
     private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/" //C
 
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message?) {
             //super.handleMessage(msg)
-            Log.v("FML", "in runnable")
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
-            val cDao = RTDDatabase.invoke(applicationContext).calendarDao()
-            val routeDao = RTDDatabase.invoke(applicationContext).routeDao()
-            val trainRoutes = routeDao.getTrainRoutes()
-
-            for(trainRoute in trainRoutes) {
-                downloadRTDAlerts(trainRoute.name)
+            val db = RTDDatabase.invoke(applicationContext)
+            GlobalScope.async {
+                val routeDao = db.routeDao()
+                val trainRoutes = routeDao.getTrainRoutes()
+                for(trainRoute in trainRoutes) {
+                    downloadRTDAlerts(trainRoute.name, db)
+                }
             }
-
-            stopSelf(msg!!.arg1)
+            Thread.sleep(10000)
+            //stopSelf(msg!!.arg1)
         }
     }
 
     override fun onCreate() {
-        Log.v("FML", "in onCreate of service")
         HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND).apply {
             start()
             serviceLooper = looper
@@ -51,7 +53,6 @@ class RiderAlertService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int) : Int {
-        Log.v("FML", "onStartCommand RTDAlertService")
         serviceHandler?.obtainMessage()?.also {msg ->
             msg.arg1 = startId
             serviceHandler?.sendMessage(msg)
@@ -59,25 +60,25 @@ class RiderAlertService : Service() {
         return START_STICKY
     }
 
-    fun downloadRTDAlerts(route: String) {
-        val newUrl = url + route
 
+    suspend fun downloadRTDAlerts(route: String, db: RTDDatabase) {
+        val newUrl = url + route
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
 
-        val requestQueue = Volley.newRequestQueue(this)
+        val requestQueue = Volley.newRequestQueue(applicationContext)
 
         val alertsRequest = GsonRequest(newUrl, RTDAlertData::class.java, null, Response.Listener {
-            response -> processAlerts(response)
+                response -> GlobalScope.launch {processAlerts(response, db)}
         },
-            Response.ErrorListener { error -> Log.v("DL ERROR", error.toString()) }
+            Response.ErrorListener { error -> Log.v(TAG, "download error $error") }
         )
         requestQueue.add(alertsRequest)
     }
 
-    private fun processAlerts(response:RTDAlertData) {
-        val stopTimeDao = RTDDatabase.invoke(applicationContext).stopTimeDao()
-        val cancelDao = RTDDatabase.invoke(applicationContext).cancelledTripDao()
+    private suspend fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
+        val stopTimeDao = db?.stopTimeDao()
+        val cancelDao = db?.cancelledTripDao()
 
         for (trains in response.data.attributes.alerts) {
             try {
@@ -85,16 +86,20 @@ class RiderAlertService : Service() {
                 val alertStartDate = simpleDateFormat.parse(trains.startDate)
                 val cancelledTrains = RiderAlertUtils.toRTDStationTimeObj(trains.info, response.data.id)
                 for (cancelled in cancelledTrains) {
-                    val cancelledTrip = CancelledTripEntity(tripId=-1)
-                    cancelledTrip.tripId = stopTimeDao.getCancelledTrip(dayOfWeek = RiderAlertUtils.getDayOfWeek(alertStartDate),
-                        startTime = Date(cancelled.startTime.time-60000),
-                        endTime = Date(cancelled.startTime.time+60000),
-                        startStation = cancelled.fromStation,
-                        routeName = response.data.id)
-                    cancelledTrip.dayDate=alertStartDate
-                    when(cancelledTrip.tripId>0) {
-                        true->cancelDao.insertAll(cancelledTrip)
-                        false->Log.v(TAG, "no trip found: input of: $cancelled")
+                   val tripID = stopTimeDao?.getCancelledTrip(dayOfWeek = RiderAlertUtils.getDayOfWeek(alertStartDate),
+                            startTime = Date(cancelled.startTime.time-60000),
+                            endTime = Date(cancelled.startTime.time+60000),
+                            startStation = cancelled.fromStation,
+                            routeName = response.data.id)
+                    if(tripID!=null) {
+                        var cancelledTrip = CancelledTripEntity(
+                            tripId = tripID,
+                            dayDate = alertStartDate
+                        )
+                        when (cancelledTrip?.tripId > 0) {
+                            true -> cancelDao?.insertAll(cancelledTrip)
+                            false -> Log.v(TAG, "no trip found: input of: $cancelled")
+                        }
                     }
                 }
             } catch (e : ParseException) {
@@ -102,6 +107,5 @@ class RiderAlertService : Service() {
             }
         }
     }
-
 
 }

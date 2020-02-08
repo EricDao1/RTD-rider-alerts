@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Before
 
@@ -41,39 +43,40 @@ class TripEntityTest {
 
     @Test
     fun insertRead() {
+        GlobalScope.launch {
+            val route0 = RouteEntity(
+                id = "113B",
+                name = "B",
+                type = 0,
+                backgroundColor = 0xFFFFF0,
+                textColor = 0XD11D1F
+            )
+            routeDao.insertAll(route0)
 
-        val route0 = RouteEntity(
-            id="113B",
-            name="B",
-            type=0,
-            backgroundColor=0xFFFFF0,
-            textColor = 0XD11D1F
-        )
-        routeDao.insertAll(route0)
+            val calendar = CalendarEntity(
+                "FR",
+                tuesday = 0,
+                thursday = 0,
+                monday = 0,
+                wednesday = 0,
+                friday = 1,
+                saturday = 0,
+                sunday = 0
+            )
+            calendarDao.insertAll(calendar)
 
-        val calendar = CalendarEntity(
-            "FR",
-            tuesday = 0,
-            thursday = 0,
-            monday = 0,
-            wednesday = 0,
-            friday = 1,
-            saturday = 0,
-            sunday = 0
-        )
-        calendarDao.insertAll(calendar)
+            val tripEntity1 = TripEntity(
+                id = 113107684,
+                routeId = "113B",
+                description = "C-Line Union Station",
+                serviceId = "FR",
+                directionId = 0
+            )
+            tripDao.insertAll(tripEntity1)
 
-        val tripEntity1 = TripEntity(
-            id=113107684,
-            routeId="113B",
-            description="C-Line Union Station",
-            serviceId = "FR",
-            directionId = 0
-        )
-        tripDao.insertAll(tripEntity1)
+            val tripEntities = tripDao.getAll()
 
-        val tripEntities = tripDao.getAll()
-
-        Truth.assertThat(tripEntities[0]).isEqualTo(tripEntity1)
+            Truth.assertThat(tripEntities[0]).isEqualTo(tripEntity1)
+        }
     }
 }
