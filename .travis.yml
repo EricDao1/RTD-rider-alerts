@@ -1,42 +1,39 @@
----
+language: android
 dist: trusty
-language: java
-jdk:
-  -openjdk11
-env:
-  -SCRIPT=bin/unit-tests.sh
-  
-  -SCRIPT=bin/run-journey-test-from-ci.sh
-  
-sudo: false
+android:
+  components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    # - tools
+    # - platform-tools
+    - extra
 
-# addons:
-#  apt:
-#    packages:
-#      -tree
-      
-before_install:
-  -rvm install 1.3.10
-  -rvm use 1.3.10
-  -bin/build-jq.sh
-  
-install: true
+    # The BuildTools version used by your project
+    - build-tools-1.3.10
 
-before_script:
-  -export PATH=$TRAVIS_BUILD_DIR/bin:$PATH
-  
-script:
-  - $SCRIPT
+    # The SDK version used to compile your project
+    - android-28
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-x86-android-28
+    - sys-img-armeabi-v7a-android-17
  
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
   
-cach:  
+cache:  
   bundler: true
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
 
   
   
