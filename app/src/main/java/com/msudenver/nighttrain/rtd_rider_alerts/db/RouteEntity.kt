@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RouteEntity(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @PrimaryKey var id: String,
     @ColumnInfo(name = "route_short_name") var name: String,
     @ColumnInfo(name = "route_type") var type: Int,
     @ColumnInfo(name = "route_color") var backgroundColor: Int,
     @ColumnInfo(name = "route_text_color") var textColor: Int
-    )
+)

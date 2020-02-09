@@ -11,6 +11,8 @@ import org.junit.Before
 import org.junit.Test
 
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.runner.RunWith
 import org.junit.rules.TestRule
 import org.junit.Rule
@@ -40,21 +42,23 @@ class CalendarEntityTest {
 
     @Test
     fun writeCalendarAndReadDB() {
-        val calendar = CalendarEntity(
-            "TTh",
-            tuesday = 1,
-            thursday = 1,
-            monday = 0,
-            wednesday = 0,
-            friday = 0,
-            saturday = 0,
-            sunday = 0
-        )
-        calendarDao.insertAll(calendar)
-        val calendarRetrieve = calendarDao.getAll()
+        GlobalScope.launch {
+            val calendar = CalendarEntity(
+                "TTh",
+                tuesday = 1,
+                thursday = 1,
+                monday = 0,
+                wednesday = 0,
+                friday = 0,
+                saturday = 0,
+                sunday = 0
+            )
+            calendarDao.insertAll(calendar)
+            val calendarRetrieve = calendarDao.getAll()
 
-        assertThat(calendar).isEqualTo(calendarRetrieve[0])
-        assertThat(calendar.thursday).isEqualTo(calendarRetrieve[0].thursday)
+            assertThat(calendar).isEqualTo(calendarRetrieve[0])
+            assertThat(calendar.thursday).isEqualTo(calendarRetrieve[0].thursday)
+        }
 
     }
 }

@@ -1,11 +1,14 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 import android.content.Context
+import android.provider.Settings
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.junit.After
 import org.junit.Before
 
@@ -38,28 +41,28 @@ class RouteEntityTest {
 
     @Test
     fun simpleInsertRecall() {
-        val route1 = RouteEntity(
-            name="A",
-            type=1,
-            backgroundColor=0xFFFFFF,
-            textColor = 0XD11D11
-        )
-        val route0 = RouteEntity(
-            name="B",
-            type=0,
-            backgroundColor=0xFFFFF0,
-            textColor = 0XD11D1F
-        )
-        routeDao.insertAll(route1)
-        routeDao.insertAll(route0)
-        val routeRetrieve = routeDao.getTrainRoutes()
+        GlobalScope.launch {
+            val route1 = RouteEntity(
+                id="A",
+                name="A",
+                type=1,
+                backgroundColor=0xFFFFFF,
+                textColor = 0XD11D11
+            )
+            val route0 = RouteEntity(
+                id="113B",
+                name="B",
+                type=0,
+                backgroundColor=0xFFFFF0,
+                textColor = 0XD11D1F
+            )
+            routeDao.insertAll(route1)
+            routeDao.insertAll(route0)
+            val routeRetrieve = routeDao.getTrainRoutes()
 
-        //confirm autogenerate primary key works
-        Truth.assertThat(routeRetrieve[0]).isNotEqualTo(0)
-        route0.id = routeRetrieve[0].id
-
-        //confirm "bus" route (route_type of 1) is not picked up
-        Truth.assertThat(routeRetrieve[0]).isEqualTo(route0)
-        Truth.assertThat(routeRetrieve.size).isEqualTo(1)
+            //confirm "bus" route (route_type of 1) is not picked up
+            Truth.assertThat(routeRetrieve[0]).isEqualTo(route0)
+            Truth.assertThat(routeRetrieve.size).isEqualTo(1)
+        }
     }
 }
