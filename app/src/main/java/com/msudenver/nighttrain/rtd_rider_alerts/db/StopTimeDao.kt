@@ -17,10 +17,10 @@ interface StopTimeDao {
             "INNER JOIN routeentity ON route_id=routeentity.id " +
             "WHERE arrival_time >= :time " +
                 "AND calendarentity.id = :scheduleType " +
-                "AND stop_id = :stopId " +
+                "AND stop_name = :stopId " +
             "ORDER BY departure_time ASC " +
             "LIMIT :maxResults")
-    suspend fun getNextTrains(time: Date, scheduleType: String, stopId: Int, maxResults: Int) : List<ScheduledTrain>
+    suspend fun getNextTrains(time: Date, scheduleType: String, stopId: String, maxResults: Int) : List<ScheduledTrain>
 
     @Query("SELECT trip_id FROM stoptimeentity " +
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
