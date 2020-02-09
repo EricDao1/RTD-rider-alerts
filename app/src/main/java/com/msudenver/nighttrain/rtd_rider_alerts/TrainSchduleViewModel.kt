@@ -20,7 +20,7 @@ class TrainSchduleViewModel(val db : RTDDatabase) : ViewModel() {
         listscheduletrains.time = Date(1970, 1, 1, 10, 1, 30)
         listscheduletrains.trainName = "C"
         listscheduletrains.tripHeader = "C-Line Union Station"
-        scheduledTrains.value = listscheduletrains//db.stopTimeDao().getNextTrains()
+        //scheduledTrains.value = listscheduletrains//db.stopTimeDao().getNextTrains()
     }
 
 

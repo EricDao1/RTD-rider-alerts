@@ -43,7 +43,6 @@ class TripEntityTest {
 
     @Test
     fun insertRead() {
-        GlobalScope.launch {
             val route0 = RouteEntity(
                 id = "113B",
                 name = "B",
@@ -78,5 +77,4 @@ class TripEntityTest {
 
             Truth.assertThat(tripEntities[0]).isEqualTo(tripEntity1)
         }
-    }
 }

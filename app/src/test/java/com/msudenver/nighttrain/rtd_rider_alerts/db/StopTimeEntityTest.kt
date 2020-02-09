@@ -34,7 +34,6 @@ class StopTimeEntityTest {
 
     @Before
     fun setUp() {
-        GlobalScope.launch {
 
             db = Room.inMemoryDatabaseBuilder(
                 context, RTDDatabase::class.java).allowMainThreadQueries().build()
@@ -68,8 +67,6 @@ class StopTimeEntityTest {
 
             routeDao.insertAll(route0, route1, route2, route3, route4, route5, route6, route7, route8, route9, route10)
 
-        }
-
     }
 
     @After
@@ -80,12 +77,11 @@ class StopTimeEntityTest {
     @Test
     fun insertRead() {
 
-        GlobalScope.launch {
             val stopTime = StopTimeEntity(
                 id = 10,
                 tripId = 113107684,
-                arrivalTime = Date(1970, 1, 1, 10, 1, 30),
-                departureTime = Date(1970, 1, 1, 10, 1, 30),
+                arrivalTime = Date(70, 0, 1, 10, 1, 30),
+                departureTime = Date(70, 0, 1, 10, 1, 30),
                 stopId = 23043,
                 stopSequence = 8
             )
@@ -109,7 +105,7 @@ class StopTimeEntityTest {
 
             scheduledTrainExpected.routeColor = 0xF79239
             scheduledTrainExpected.routeTextColor = 0xFFFFFF
-            scheduledTrainExpected.time = Date(1970, 1, 1, 10, 1, 30)
+            scheduledTrainExpected.time = Date(70, 0, 1, 10, 1, 30)
             scheduledTrainExpected.trainName = "C"
             scheduledTrainExpected.tripHeader = "C-Line Union Station"
 
@@ -119,9 +115,9 @@ class StopTimeEntityTest {
 
             val scheduledTrain = stopTimeDao.getNextTrains(
                 maxResults = 1,
-                scheduleType = "friday",
+                dayOfWeek = "friday",
                 stopId = 23043,
-                time = Date(1970, 1, 1, 10, 0, 0)
+                time = Date(70, 0, 1, 10, 1, 0)
             )
             Truth.assertThat(scheduledTrain[0].time).isEqualTo(scheduledTrainExpected.time)
             Truth.assertThat(scheduledTrain[0].routeColor)
@@ -132,13 +128,11 @@ class StopTimeEntityTest {
                 .isEqualTo(scheduledTrainExpected.trainName)
             Truth.assertThat(scheduledTrain[0].tripHeader)
                 .isEqualTo(scheduledTrainExpected.tripHeader)
-        }
     }
 
     @Test
     fun findCancelledTrain() {
 
-        GlobalScope.launch {
             val trip1 = TripEntity(
                 id = 113109947,
                 description = "E-Line Union Station",
@@ -309,56 +303,56 @@ class StopTimeEntityTest {
             val stopTime1 = StopTimeEntity(
                 tripId = 113107809,
                 arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                departureTime = Date(1970, 1, 1, 15, 42, 0),
+                departureTime = Date(70, 0, 1, 15, 42, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
             val stopTime2 = StopTimeEntity(
                 tripId = 113108347,
                 arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                departureTime = Date(1970, 1, 1, 15, 40, 15),
+                departureTime = Date(70, 0, 1, 15, 40, 15),
                 stopId = 35211,
                 stopSequence = 22
             )
             val stopTime3 = StopTimeEntity(
                 tripId = 113108518,
                 arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                departureTime = Date(1970, 1, 1, 15, 42, 0),
+                departureTime = Date(70, 0, 1, 15, 42, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
             val stopTime4 = StopTimeEntity(
                 tripId = 113108917,
                 arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                departureTime = Date(1970, 1, 1, 15, 40, 15),
+                departureTime = Date(70, 0, 1, 15, 40, 15),
                 stopId = 35211,
                 stopSequence = 22
             )
             val stopTime5 = StopTimeEntity(
                 tripId = 113109247,
                 arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                departureTime = Date(1970, 1, 1, 15, 41, 0),
+                departureTime = Date(70, 0, 1, 15, 41, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
             val stopTime6 = StopTimeEntity(
                 tripId = 113109605,
                 arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                departureTime = Date(1970, 1, 1, 15, 41, 15),
+                departureTime = Date(70, 0, 1, 15, 41, 15),
                 stopId = 35211,
                 stopSequence = 21
             )
             val stopTime7 = StopTimeEntity(
                 tripId = 113109956,
                 arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                departureTime = Date(1970, 1, 1, 15, 41, 0),
+                departureTime = Date(70, 0, 1, 15, 41, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
             val stopTime8 = StopTimeEntity(
                 tripId = 113110087,
                 arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                departureTime = Date(1970, 1, 1, 15, 41, 15),
+                departureTime = Date(70, 0, 1, 15, 41, 15),
                 stopId = 35211,
                 stopSequence = 21
             )
@@ -382,6 +376,5 @@ class StopTimeEntityTest {
                 "Ridgegate Parkway Station"
             ) //"sunday",
             Truth.assertThat(cancelledTrip).isEqualTo(113109956)
-        }
     }
 }
