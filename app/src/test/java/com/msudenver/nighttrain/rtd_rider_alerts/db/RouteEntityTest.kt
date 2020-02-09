@@ -41,7 +41,6 @@ class RouteEntityTest {
 
     @Test
     fun simpleInsertRecall() {
-        GlobalScope.launch {
             val route1 = RouteEntity(
                 id="A",
                 name="A",
@@ -64,5 +63,4 @@ class RouteEntityTest {
             Truth.assertThat(routeRetrieve[0]).isEqualTo(route0)
             Truth.assertThat(routeRetrieve.size).isEqualTo(1)
         }
-    }
 }

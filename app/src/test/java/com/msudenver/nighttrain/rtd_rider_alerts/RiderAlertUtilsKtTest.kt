@@ -48,7 +48,7 @@ class RiderAlertUtilsKtTest {
         Truth.assertThat(alerts.size).isEqualTo(10)
         Truth.assertThat(alerts[0].fromStation).isEqualTo("Littleton / Mineral Ave Station")
         Truth.assertThat(alerts[0].startTime.minutes==11).isTrue()
-        Truth.assertThat(alerts[9].fromStation).isEqualTo("Union Station")
+        Truth.assertThat(alerts[9].fromStation).isEqualTo("Union Station Track 12")
     }
 
     @Test

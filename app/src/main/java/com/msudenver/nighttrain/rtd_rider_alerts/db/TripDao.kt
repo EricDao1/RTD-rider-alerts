@@ -5,14 +5,14 @@ import androidx.room.*
 @Dao
 interface TripDao {
     @Query("SELECT * FROM tripentity")
-    suspend fun getAll(): List<TripEntity>
+    fun getAll(): List<TripEntity>
 
     @Insert
-    suspend fun insertAll(vararg trip: TripEntity)
+    fun insertAll(vararg trip: TripEntity)
 
     @Delete
-    suspend fun delete(trip: TripEntity)
+    fun delete(trip: TripEntity)
 
     @Update
-    suspend fun updateTrip(vararg trip: TripEntity)
+    fun updateTrip(vararg trip: TripEntity)
 }
