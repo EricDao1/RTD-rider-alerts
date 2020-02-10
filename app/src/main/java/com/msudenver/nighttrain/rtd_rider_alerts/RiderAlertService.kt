@@ -92,18 +92,18 @@ class RiderAlertService : Service() {
                             startStation = cancelled.fromStation,
                             routeName = response.data.id)
                     if(tripID!=null) {
-                        var cancelledTrip = CancelledTripEntity(
+                        val cancelledTrip = CancelledTripEntity(
                             tripId = tripID,
                             dayDate = alertStartDate
                         )
-                        when (cancelledTrip?.tripId > 0) {
+                        when (cancelledTrip.tripId > 0) {
                             true -> cancelDao?.insertAll(cancelledTrip)
                             false -> Log.v(TAG, "no trip found: input of: $cancelled")
                         }
                     }
                 }
             } catch (e : ParseException) {
-                null
+
             }
         }
     }

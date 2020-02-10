@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'jacoco'
+apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -19,7 +19,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            testCoverageEnabled true
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            testCoverageEnabled true
+        }
+
     }
     // https://stackoverflow.com/questions/52518378/more-than-one-file-was-found-with-os-independent-path-meta-inf-proguard-android
     packagingOptions {
@@ -27,7 +34,11 @@ android {
         exclude 'META-INF/proguard/coroutines.pro'
     }
     testOptions {
-        unitTests.includeAndroidResources = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
     compileOptions {
         targetCompatibility = "1.8"
@@ -53,7 +64,7 @@ dependencies {
     def room_version = "2.2.3"
     apply plugin: "kotlin-kapt"
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    // annotationProcessor "androidx.room:room-compiler:$room_version"
     // For Kotlin use kapt instead of annotationProcessor
     kapt "androidx.room:room-compiler:$room_version"
 
@@ -83,3 +94,10 @@ dependencies {
 
     implementation 'com.android.support:recyclerview-v7:28.0.0'
 }
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+}
+
