@@ -1,6 +1,13 @@
 language: android
 dist: trusty
 android:
+  android {
+    buildTypes {
+      debug {
+        testCoverageEnabled true
+      }
+    }
+  }
   components:
     # Uncomment the lines below if you want to
     # use the latest revision of Android SDK Tools
@@ -63,7 +70,8 @@ install:
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
   # - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
-  
+  - ./gradlew build jacocoTestReport assembleAndroidTest
+  ./gradlew connectedCheck
 cache:  
   bundler: true
   directories:
