@@ -10,14 +10,14 @@ interface StopDao {
             "INNER JOIN RouteEntity on route_id = RouteEntity.id " +
             "where route_type = 0 OR route_type = 2 " +
             "order by stop_name")
-    suspend fun getTrainStops(): List<String>
+    fun getTrainStops(): List<String>
 
     @Insert
-    suspend fun insertAll(vararg stop: StopEntity)
+    fun insertAll(vararg stop: StopEntity)
 
     @Delete
-    suspend fun delete(stop: StopEntity)
+    fun delete(stop: StopEntity)
 
     @Update
-    suspend fun updateStop(vararg stops: StopEntity)
+    fun updateStop(vararg stops: StopEntity)
 }

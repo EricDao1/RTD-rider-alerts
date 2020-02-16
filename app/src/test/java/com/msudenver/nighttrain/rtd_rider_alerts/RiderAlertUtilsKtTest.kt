@@ -13,7 +13,7 @@ class RiderAlertUtilsKtTest {
     fun testOneStationParse() {
         val alert = RiderAlertUtils.parseStationAlert("6:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station")
         Truth.assertThat(alert.fromStation).isEqualTo("Union Station Track 12")
-        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,11,49,0)) //6:49 pm in UTC time
+        Truth.assertThat(alert.startTime.time).isEqualTo(67740000) //Date(70,0,1,11,49,0)) //6:49 pm in UTC time
     }
 
     //RTD does a funny thing where before 3:30 a.m. it is considered the previous day and the time is just > 24 hours, i.e. 24:51
@@ -21,7 +21,7 @@ class RiderAlertUtilsKtTest {
     fun testAfterMidnightStationParse() {
         val alert = RiderAlertUtils.parseStationAlert("12:51 am from Union Station Track 12 to Littleton / Mineral Ave Station")
         Truth.assertThat(alert.fromStation).isEqualTo("Union Station Track 12")
-        Truth.assertThat(alert.startTime).isEqualTo(Date(70,0,1,17,51,0)) //24:51 in UTC time
+        Truth.assertThat(alert.startTime.time).isEqualTo(89460000) //Date(70,0,1,17,51,0)) //24:51 in UTC time
     }
 
     @Test
@@ -48,7 +48,7 @@ class RiderAlertUtilsKtTest {
         Truth.assertThat(alerts.size).isEqualTo(10)
         Truth.assertThat(alerts[0].fromStation).isEqualTo("Littleton / Mineral Ave Station")
         Truth.assertThat(alerts[0].startTime.minutes==11).isTrue()
-        Truth.assertThat(alerts[9].fromStation).isEqualTo("Union Station")
+        Truth.assertThat(alerts[9].fromStation).isEqualTo("Union Station Track 12")
     }
 
     @Test

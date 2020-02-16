@@ -76,7 +76,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     // Optional -- Robolectric environment
     testImplementation 'androidx.test:core:1.2.0'
-    testImplementation 'org.robolectric:robolectric:4.2.1'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
     //?? https://stackoverflow.com/questions/53619024/attempted-to-use-androidjunit4-with-standard-junit-runner-and-delegate-runner-o
     // Optional -- Mockito framework
     testImplementation 'org.mockito:mockito-core:2.11.0'

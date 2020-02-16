@@ -41,7 +41,6 @@ class StopEntityTest {
 
     @Test
     fun insertRead() {
-        GlobalScope.launch {
             val stop1 = StopEntity(
                 id=23043,
                 description = "Vehicle Travelling West",
@@ -62,9 +61,7 @@ class StopEntityTest {
 
             val returnedStops = stopDao.getTrainStops()
 
-            Truth.assertThat(returnedStops[0]).isEqualTo(stop2)
-            Truth.assertThat(returnedStops[0].id).isEqualTo(stop2.id)
-        }
+            Truth.assertThat(returnedStops[0]).isEqualTo("10th & Osage Station")
 
     }
 }

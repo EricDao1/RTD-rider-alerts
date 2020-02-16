@@ -37,15 +37,6 @@ class TrainSchduleViewModel(val context : Context) : ViewModel() {
             _stationNames.value = db.stopDao().getTrainStops()
         }
 
-
-       /* val listscheduletrains = ScheduledTrain()
-        listscheduletrains.routeColor = 0xfffff0
-        listscheduletrains.routeTextColor = 0xd11d1f
-        listscheduletrains.time = Date(1970, 1, 1, 10, 1, 30)
-        listscheduletrains.trainName = "C"
-        listscheduletrains.tripHeader = "C-Line Union Station"*/
-
-
     }
     fun setStationNames(station : String) {
         GlobalScope.launch {
