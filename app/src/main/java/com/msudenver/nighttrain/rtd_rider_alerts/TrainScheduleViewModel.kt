@@ -43,7 +43,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
             val rightnow = Date()
             val nowtime = Date(70,0,0,rightnow.hours,rightnow.minutes, rightnow.seconds)
             scheduledTrains.postValue(db.stopTimeDao().getNextTrains(
-                Date(70,0,1,rightnow.hours,rightnow.minutes, rightnow.seconds) ,
+                Date(70,0,1,rightnow.hours-7,rightnow.minutes, rightnow.seconds) ,
                 RiderAlertUtils.getDayOfWeek(Date()),
                 station,
                 maxResults = 10

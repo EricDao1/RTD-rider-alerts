@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
+import java.text.SimpleDateFormat
 
 class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
         RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
@@ -17,12 +18,13 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
             val textDestination = view.findViewById<TextView>(R.id.textDestination)
             val textLine = view.findViewById<TextView>(R.id.textLine)
             val textTime = view.findViewById<TextView>(R.id.textTime)
+            val formatter = SimpleDateFormat("kk:mm")
 
             textDestination.text = scheduledTrain.tripHeader
-            textTime.text = scheduledTrain.time.toString()
+            textTime.text = formatter.format(scheduledTrain.time)
             textLine.text = scheduledTrain.trainName
-            textLine.setBackgroundColor(scheduledTrain.routeColor)
-            textLine.setTextColor(scheduledTrain.routeTextColor)
+            textLine.setBackgroundColor(Color.parseColor(String.format("#%06X", scheduledTrain.routeColor)))
+            textLine.setTextColor(Color.parseColor(String.format("#%06X",scheduledTrain.routeTextColor)))
         }
     }
 

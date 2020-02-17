@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
-
-
         val stationsSpinner = findViewById<Spinner>(R.id.stations_spinner)
 
         viewModel = ViewModelProvider(this).get(TrainScheduleViewModel::class.java)
@@ -43,9 +41,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         //startService(Intent(this,RiderAlertService::class.java))
             val adapter = TrainTimeAdapter(scheduledTrains)
             recyclerView.adapter = adapter
-
+        })
     }
-        )}
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
