@@ -24,6 +24,11 @@ allprojects {
     }
 }
 
+ext {
+    espressoVersion="3.1.0"
+    coreVersion = "1.2.0"
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

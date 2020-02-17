@@ -35,7 +35,6 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
     }
 
     override fun getItemCount(): Int {
-
        return myDataset.size
     }
 
