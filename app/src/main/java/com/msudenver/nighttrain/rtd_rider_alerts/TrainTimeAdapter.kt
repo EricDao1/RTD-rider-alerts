@@ -6,21 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 
-class TrainTimeAdapter (private val myDataset: Array<String>) :
+class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
         RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindItems(user : String)
+        fun bindItems(scheduledTrain : ScheduledTrain)
         {
             val textDestination = view.findViewById<TextView>(R.id.textDestination)
             val textLine = view.findViewById<TextView>(R.id.textLine)
             val textTime = view.findViewById<TextView>(R.id.textTime)
 
-            textDestination.text = user
-            textTime.text = "1010pm"
-            textLine.text = "F"
-            textLine.setBackgroundColor(Color.RED)
+            textDestination.text = scheduledTrain.tripHeader
+            textTime.text = scheduledTrain.time.toString()
+            textLine.text = scheduledTrain.trainName
+            textLine.setBackgroundColor(scheduledTrain.routeColor)
+            textLine.setTextColor(scheduledTrain.routeTextColor)
         }
     }
 
