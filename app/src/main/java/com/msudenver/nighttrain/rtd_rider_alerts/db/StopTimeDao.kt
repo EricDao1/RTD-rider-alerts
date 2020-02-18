@@ -15,13 +15,14 @@ interface StopTimeDao {
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
             "INNER JOIN calendarentity ON service_id=calendarentity.id " +
             "INNER JOIN routeentity ON route_id=routeentity.id " +
+            "INNER JOIN stopentity ON stop_id=stopentity.id " +
             "WHERE arrival_time >= :time " +
             " AND (CASE :dayOfWeek WHEN 'sunday' THEN sunday WHEN 'monday' THEN monday " +
             "WHEN 'tuesday' THEN tuesday WHEN 'wednesday' THEN wednesday WHEN 'thursday' THEN thursday WHEN 'friday' THEN friday WHEN 'saturday' THEN saturday END) = 1" +
-            " AND stop_id = :stopId " +
+            " AND stop_name = :station " +
             "ORDER BY departure_time ASC " +
             "LIMIT :maxResults")
-    fun getNextTrains(time: Date, dayOfWeek: String, stopId: Int, maxResults: Int) : List<ScheduledTrain>
+    fun getNextTrains(time: Date, dayOfWeek: String, station: String, maxResults: Int) : List<ScheduledTrain>
 
     @Query("SELECT trip_id FROM stoptimeentity " +
             "INNER JOIN tripentity ON trip_id=tripentity.id " +

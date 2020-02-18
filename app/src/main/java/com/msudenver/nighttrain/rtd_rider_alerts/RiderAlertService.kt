@@ -96,7 +96,7 @@ class RiderAlertService : Service() {
                             tripId = tripID,
                             dayDate = alertStartDate
                         )
-                        when (cancelledTrip?.tripId > 0) {
+                        when (cancelledTrip.tripId > 0) {
                             true -> cancelDao?.insertAll(cancelledTrip)
                             false -> Log.v(TAG, "no trip found: input of: $cancelled")
                         }

@@ -6,21 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
+import java.text.SimpleDateFormat
 
-class TrainTimeAdapter (private val myDataset: Array<String>) :
+class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
         RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindItems(user : String)
+        fun bindItems(scheduledTrain : ScheduledTrain)
         {
             val textDestination = view.findViewById<TextView>(R.id.textDestination)
             val textLine = view.findViewById<TextView>(R.id.textLine)
             val textTime = view.findViewById<TextView>(R.id.textTime)
+            val formatter = SimpleDateFormat("kk:mm")
 
-            textDestination.text = user
-            textTime.text = "1010pm"
-            textLine.text = "F"
-            textLine.setBackgroundColor(Color.RED)
+            textDestination.text = scheduledTrain.tripHeader
+            textTime.text = formatter.format(scheduledTrain.time)
+            textLine.text = scheduledTrain.trainName
+            textLine.setBackgroundColor(Color.parseColor(String.format("#%06X", scheduledTrain.routeColor)))
+            textLine.setTextColor(Color.parseColor(String.format("#%06X",scheduledTrain.routeTextColor)))
         }
     }
 
@@ -31,7 +35,6 @@ class TrainTimeAdapter (private val myDataset: Array<String>) :
     }
 
     override fun getItemCount(): Int {
-
        return myDataset.size
     }
 

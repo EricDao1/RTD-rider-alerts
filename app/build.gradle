@@ -59,13 +59,19 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
-    // AndroidJUnitRunner and JUnit Rules
+    // espresso testing
+    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion;
     androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test:rules:1.1.0'
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    //androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion;
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:' + rootProject.espressoVersion;
 
-    // Assertions
+
+    //regular testing
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation 'androidx.test.ext:junit:1.1.1'
     testImplementation 'androidx.test.ext:truth:1.2.0'
     testImplementation 'com.google.truth:truth:1.0.1'
@@ -82,4 +88,5 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.11.0'
 
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }
