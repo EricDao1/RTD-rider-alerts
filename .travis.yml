@@ -37,12 +37,12 @@ before_cache:
 install:
   # List and delete unnecessary components to free space
   - sdkmanager --list || true
-  - sdkmanager --uninstall "system-images;android-15;default;armeabi-v7a"
-  - sdkmanager --uninstall "system-images;android-16;default;armeabi-v7a"
-  - sdkmanager --uninstall "system-images;android-17;default;armeabi-v7a"
-  - sdkmanager --uninstall "system-images;android-18;default;armeabi-v7a"
-  - sdkmanager --uninstall "system-images;android-19;default;armeabi-v7a"
-  - sdkmanager --uninstall "system-images;android-21;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-15;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-16;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-17;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-18;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-19;default;armeabi-v7a"
+#  - sdkmanager --uninstall "system-images;android-21;default;armeabi-v7a"
   - sdkmanager --uninstall "extras;google;google_play_services"
   - sdkmanager --uninstall "extras;android;support"
   - sdkmanager --uninstall "platforms;android-10"
@@ -63,16 +63,16 @@ install:
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
   # - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
-  - ./gradlew build jacocoTestReport assembleAndroidTest
-  ./gradlew connectedCheck
+  # - ./gradlew build jacocoTestReport assembleAndroidTest
+  # ./gradlew connectedCheck
 cache:  
   bundler: true
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+# after_success:
+#  - bash <(curl -s https://codecov.io/bash)
   
   
   
