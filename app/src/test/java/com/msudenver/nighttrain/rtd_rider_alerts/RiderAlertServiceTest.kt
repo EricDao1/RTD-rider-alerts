@@ -16,8 +16,4 @@ class RiderAlertServiceTest {
     fun processAlerts() {
     }
 
-    @Test
-    fun getDayOfWeekBefore() {
-
-    }
 }

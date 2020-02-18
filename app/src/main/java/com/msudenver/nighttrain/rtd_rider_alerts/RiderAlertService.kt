@@ -33,6 +33,7 @@ class RiderAlertService : Service() {
                 for(trainRoute in trainRoutes) {
                     downloadRTDAlerts(trainRoute.name, db)
                 }
+                db.cancelledTripDao().deleteDuplicateAlerts()
             }
             Thread.sleep(10000)
             //stopSelf(msg!!.arg1)
@@ -61,7 +62,7 @@ class RiderAlertService : Service() {
     }
 
 
-    suspend fun downloadRTDAlerts(route: String, db: RTDDatabase) {
+    fun downloadRTDAlerts(route: String, db: RTDDatabase) {
         val newUrl = url + route
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
@@ -76,7 +77,7 @@ class RiderAlertService : Service() {
         requestQueue.add(alertsRequest)
     }
 
-    private suspend fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
+    private fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
         val stopTimeDao = db?.stopTimeDao()
         val cancelDao = db?.cancelledTripDao()
 
