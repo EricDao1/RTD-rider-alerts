@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             startService(Intent(this,RiderAlertService::class.java))
             Toast.makeText(this, "Downloads started...", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
