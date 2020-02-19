@@ -41,38 +41,25 @@ before_install:
 install:
   # List and delete unnecessary components to free space
   - sdkmanager --list || true
-#  - sdkmanager --uninstall "system-images;android-15;default;armeabi-v7a"
-#  - sdkmanager --uninstall "system-images;android-16;default;armeabi-v7a"
-#  - sdkmanager --uninstall "system-images;android-17;default;armeabi-v7a"
-#  - sdkmanager --uninstall "system-images;android-18;default;armeabi-v7a"
-#  - sdkmanager --uninstall "system-images;android-19;default;armeabi-v7a"
-#  - sdkmanager --uninstall "system-images;android-21;default;armeabi-v7a"
   - sdkmanager --uninstall "extras;google;google_play_services"
-  - sdkmanager --uninstall "extras;android;support"
-  - sdkmanager --uninstall "platforms;android-10"
-  - sdkmanager --uninstall "platforms;android-15"
-  - sdkmanager --uninstall "platforms;android-16"
-  - sdkmanager --uninstall "platforms;android-17"
-  - sdkmanager --uninstall "platforms;android-18"
-  - sdkmanager --uninstall "platforms;android-19"
-  - sdkmanager --uninstall "platforms;android-20"
-  - sdkmanager --uninstall "platforms;android-21"
-  - sdkmanager --uninstall "build-tools;28.0.3"
+  # - sdkmanager --uninstall "extras;android;support"
+  # - sdkmanager --uninstall "build-tools;28.0.3"
   # Update sdk tools to latest version and install/update components
   - echo yes | sdkmanager "tools"
   # - echo yes | sdkmanager "platforms;android-28" # Latest platform required by SDK tools
-  - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
+  # - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
   - echo yes | sdkmanager "extras;android;m2repository"
   - echo yes | sdkmanager "extras;google;m2repository"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  - echo yes | sdkmanager "$EMULATOR"
+  # - echo yes | sdkmanager "$EMULATOR"
     # Create and start emulator
   # - echo no | avdmanager create avd -n test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
   # - emulator -avd test -engine classic -no-window -camera-back none -camera-front none -verbose -qemu -m 512 &
     # Start adbd, wait for device connected and show android serial
  # - adb wait-for-device get-serialno
-  # - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
+  - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
+  - echo no | avdmanager create avd -f -n test -k "$EMULATOR" -c 500M
   # - ./gradlew build jacocoTestReport assembleAndroidTest
  # - ./gradlew connectedCheck
 cache:  
@@ -85,7 +72,6 @@ cache:
 #  - bash <(curl -s https://codecov.io/bash)
 
 before_script:
-  - echo no | android create avd --force -n test -t android-28 --abi x86 -c 100M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
