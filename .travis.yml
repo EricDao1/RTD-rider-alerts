@@ -23,15 +23,19 @@ android:
     # Specify at least one system image,
     # if you need to run emulator(s) during your tests
     - sys-img-x86-android-28
-    - sys-img-armeabi-v7a-android-17
+    #- sys-img-armeabi-v7a-android-17
 
 env:
   global:
     - API=28 # Android API level 25 by default
+    - ABI=x86_64
+    - TAG=google_apis 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
   
+before_install:
+  - export EMULATOR="system-images;android-${API};${TAG};${ABI}" # Used to install/create emulator
 # https://stackoverflow.com/questions/42731625/travis-ci-failed-because-cannot-accept-license-constrain-layout
 # needed b/c travis doesn't accept licenses
 install:
@@ -56,15 +60,21 @@ install:
   - sdkmanager --uninstall "build-tools;28.0.3"
   # Update sdk tools to latest version and install/update components
   - echo yes | sdkmanager "tools"
-  - echo yes | sdkmanager "platforms;android-25" # Latest platform required by SDK tools
+  # - echo yes | sdkmanager "platforms;android-28" # Latest platform required by SDK tools
   - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
   - echo yes | sdkmanager "extras;android;m2repository"
   - echo yes | sdkmanager "extras;google;m2repository"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
+  - echo yes | sdkmanager "system-images;android-${API};$google_apis;${ABI}"
+    # Create and start emulator
+  - echo no | avdmanager create avd -n acib -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+  - emulator -avd acib -engine classic -no-window -camera-back none -camera-front none -verbose -qemu -m 512 &
+    # Start adbd, wait for device connected and show android serial
+  - adb wait-for-device get-serialno
   # - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
   # - ./gradlew build jacocoTestReport assembleAndroidTest
-  # ./gradlew connectedCheck
+  - ./gradlew connectedCheck
 cache:  
   bundler: true
   directories:
