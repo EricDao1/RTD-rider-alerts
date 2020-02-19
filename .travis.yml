@@ -46,17 +46,13 @@ install:
   # - sdkmanager --uninstall "build-tools;28.0.3"
   # Update sdk tools to latest version and install/update components
   - echo y | sdkmanager "tools"
-  - echo y
   # - echo yes | sdkmanager "platforms;android-28" # Latest platform required by SDK tools
   # - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
   - echo y | sdkmanager "extras;android;m2repository"
-  - echo y
   - echo y | sdkmanager "extras;google;m2repository"
-  - echo y
   - echo y | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
-  - echo y
   - echo y | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  - echo y
+  # - echo y | sdkmanager "emulator"
   # - echo yes | sdkmanager "$EMULATOR"
     # Create and start emulator
   # - echo no | avdmanager create avd -n test -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
@@ -76,7 +72,8 @@ cache:
 #  - bash <(curl -s https://codecov.io/bash)
 
 before_script:
-  - echo yes | sdkmanager "$EMULATOR"
+  - echo y | sdkmanager "emulator"
+  - echo y | sdkmanager "$EMULATOR"
   - echo no | avdmanager create avd -f -n test -k "$EMULATOR" -c 500M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
