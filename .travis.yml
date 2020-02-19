@@ -28,7 +28,7 @@ android:
 env:
   global:
     - API=28 # Android API level 25 by default
-    - ABI=x86
+    - ABI=armeabi-v7a
     - TAG=google_apis 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
