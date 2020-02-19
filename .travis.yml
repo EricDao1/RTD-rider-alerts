@@ -74,6 +74,9 @@ cache:
 before_script:
   - echo y | sdkmanager "emulator"
   - echo y | sdkmanager "$EMULATOR"
+  - sdkmanager --list || true
+  - export PATH=/usr/local/android-sdk/emulator:$PATH
+  - echo $PATH
   - echo no | avdmanager create avd -f -n test -k "$EMULATOR" -c 500M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
