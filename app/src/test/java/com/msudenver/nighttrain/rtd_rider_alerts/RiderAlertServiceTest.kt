@@ -112,8 +112,8 @@ class RiderAlertServiceTest {
         db.stopTimeDao().insertAll(stopTime1, stopTime2, stopTime3, stopTime4, stopTime5, stopTime6, stopTime7,stopTime8, stopTime9,   stopTime10, stopTime11, stopTime12,stopTime13,stopTime14 ,stopTime15, stopTime16, stopTime17, stopTime18 ,stopTime19, stopTime20)
 
         riderAlertService.processAlerts(alertData, db)
-        val today = Date(120,1,21)
-        val tomorrow = Date(120,1,23)
+        val today = Date(Date.UTC(120,1,21,0,0,0))
+        val tomorrow = Date(Date.UTC(120,1,23,0,0,0))
 
         Truth.assertThat(db.cancelledTripDao().getTrainsForToday(today, tomorrow).size).isEqualTo(20)
     }

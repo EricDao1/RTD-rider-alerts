@@ -86,6 +86,7 @@ class RiderAlertService : Service() {
         for (trains in response.data.attributes.alerts) {
             try {
                 val simpleDateFormat = SimpleDateFormat("MMMM dd, yyyy hh:mmaa", Locale.US)
+                simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
                 val alertStartDate = simpleDateFormat.parse(trains.startDate)
                 val cancelledTrains = RiderAlertUtils.toRTDStationTimeObj(trains.info, response.data.id)
                 for (cancelled in cancelledTrains) {
