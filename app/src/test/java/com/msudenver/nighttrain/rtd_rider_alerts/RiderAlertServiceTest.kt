@@ -17,10 +17,6 @@ class RiderAlertServiceTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     @Test
-    fun downloadRTDAlerts() {
-    }
-
-    @Test
     fun processAlertsTripNotFound() {
         val rtdAlert1 = RTDAlert("Rider Alert", "C Line Trip 3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 11 other trips cancelled on Fri Feb 21 due to operator shortage.<br><br>Affected trips:<br>3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>4:34 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>6:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:19 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:21 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:51 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:21 am from Union Station Track 12 to Littleton / Mineral Ave Station",
             "February 21, 2020 3:56PM", "February 22, 2020 2:51AM")

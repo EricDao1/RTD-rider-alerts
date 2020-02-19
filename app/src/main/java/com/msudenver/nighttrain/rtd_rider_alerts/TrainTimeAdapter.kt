@@ -25,7 +25,7 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
 
             textDestination.text = scheduledTrain.tripHeader
             textTime.text = formatter.format(mtDate.time)
-            textLine.text = "  " + scheduledTrain.trainName + "  "
+            textLine.text = scheduledTrain.trainName
             textLine.setBackgroundColor(Color.parseColor(String.format("#%06X", scheduledTrain.routeColor)))
             textLine.setTextColor(Color.parseColor(String.format("#%06X",scheduledTrain.routeTextColor)))
         }

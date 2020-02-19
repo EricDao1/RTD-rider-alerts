@@ -1,11 +1,10 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -38,10 +37,16 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
 
         viewModel.scheduledTrains.observe(this, Observer { scheduledTrains ->
-        //startService(Intent(this,RiderAlertService::class.java))
             val adapter = TrainTimeAdapter(scheduledTrains)
             recyclerView.adapter = adapter
         })
+
+        val downloadButton: Button = findViewById(R.id.download_button)
+        downloadButton.setOnClickListener {
+            startService(Intent(this,RiderAlertService::class.java))
+            Toast.makeText(this, "Downloads started...", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
