@@ -5,7 +5,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,6 +47,8 @@ class CancelledTripEntityTest {
         //val calendar = Calendar.getInstance()
         //calendar.set(70,0,1,12,0,0)
         val calendar = Date(70,0,1)
+        val calendar2 = Date(70,0,2)
+
         val trip = TripEntity(id=100, description = "something",routeId = "A", serviceId = "SA", directionId = 0)
         val trip2 = TripEntity(id=101, description = "something",routeId = "A", serviceId = "SA", directionId = 0)
 
@@ -62,7 +63,7 @@ class CancelledTripEntityTest {
         cancelledTripDao.insertAll(cancelledTrip1,cancelledTrip2, cancelledTrip3)
         cancelledTripDao.deleteDuplicateAlerts()
 
-        val cancelled = cancelledTripDao.getTrainsForToday(calendar)
+        val cancelled = cancelledTripDao.getTrainsForToday(calendar, calendar2)
         Truth.assertThat(cancelled.size).isEqualTo(2)
     }
 }

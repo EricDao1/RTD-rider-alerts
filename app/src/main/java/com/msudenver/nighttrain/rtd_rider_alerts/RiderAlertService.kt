@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
@@ -61,8 +62,8 @@ class RiderAlertService : Service() {
         return START_STICKY
     }
 
-
-    fun downloadRTDAlerts(route: String, db: RTDDatabase) {
+    @VisibleForTesting
+    private fun downloadRTDAlerts(route: String, db: RTDDatabase) {
         val newUrl = url + route
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
@@ -77,7 +78,8 @@ class RiderAlertService : Service() {
         requestQueue.add(alertsRequest)
     }
 
-    private fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
         val stopTimeDao = db?.stopTimeDao()
         val cancelDao = db?.cancelledTripDao()
 
