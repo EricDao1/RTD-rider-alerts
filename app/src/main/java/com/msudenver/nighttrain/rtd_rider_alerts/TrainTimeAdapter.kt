@@ -24,7 +24,13 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
             mtDate.timeInMillis = scheduledTrain.time.time + 7*60*60*1000 //7 hours in milliseconds :(
 
             textDestination.text = scheduledTrain.tripHeader
-            textTime.text = formatter.format(mtDate.time)
+            if(scheduledTrain.cancelledAlert > 0) {
+                textTime.text = "CANCELLED"
+                textTime.setTextColor(Color.RED)
+            } else {
+                textTime.text = formatter.format(mtDate.time)
+                textTime.setTextColor(Color.parseColor(String.format("#424242")))
+            }
             textLine.text = scheduledTrain.trainName
             textLine.setBackgroundColor(Color.parseColor(String.format("#%06X", scheduledTrain.routeColor)))
             textLine.setTextColor(Color.parseColor(String.format("#%06X",scheduledTrain.routeTextColor)))
