@@ -48,12 +48,12 @@ jobs:
           name: Test with Firebase Test Lab
           command: >
             sudo gcloud firebase test android run \ 
-              --app <local_server_path>/<app_apk>.apk \ 
-              --test <local_server_path>/<app_test_apk>.apk \ 
+              --app ~code/RTD-rider-alerts/app/build/outputs/apk/debug/app-debug.apk \ 
+              --test ~code/RTD-rider-alerts/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \ 
               --results-bucket=gs://rtd-alerts-android-app/ \
-              --results-dir=tests/
+              --results-dir=tests/${CIRCLE_BUILD_NUM}/
       - run: # --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
           name: Install gsutil dependency and copy test results data
           command: |
             sudo pip install -U crcmod
-            sudo gsutil -m cp -r -U `sudo gsutil ls gs://rtd-alerts-android-app/[OBJECT_NAME] | tail -1` ${CIRCLE_ARTIFACTS}/ | true
+            sudo gsutil -m cp -r -U `sudo gsutil ls gs://rtd-alerts-android-app/tests/${CIRCLE_BUILD_NUM}/ | tail -1` ${CIRCLE_ARTIFACTS}/ | true
