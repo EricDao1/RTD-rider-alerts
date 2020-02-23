@@ -116,7 +116,7 @@ class StopTimeEntityTest {
             val scheduledTrain = stopTimeDao.getNextTrains(
                 maxResults = 1,
                 dayOfWeek = "friday",
-                stopId = 23043,
+                station = "10th & Osage Station",
                 time = Date(70, 0, 1, 10, 1, 0)
             )
             Truth.assertThat(scheduledTrain[0].time).isEqualTo(scheduledTrainExpected.time)

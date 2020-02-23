@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.*
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
@@ -33,6 +34,7 @@ class RiderAlertService : Service() {
                 for(trainRoute in trainRoutes) {
                     downloadRTDAlerts(trainRoute.name, db)
                 }
+                db.cancelledTripDao().deleteDuplicateAlerts()
             }
             Thread.sleep(10000)
             //stopSelf(msg!!.arg1)
@@ -60,8 +62,8 @@ class RiderAlertService : Service() {
         return START_STICKY
     }
 
-
-    suspend fun downloadRTDAlerts(route: String, db: RTDDatabase) {
+    @VisibleForTesting
+    private fun downloadRTDAlerts(route: String, db: RTDDatabase) {
         val newUrl = url + route
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
@@ -76,13 +78,15 @@ class RiderAlertService : Service() {
         requestQueue.add(alertsRequest)
     }
 
-    private suspend fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
         val stopTimeDao = db?.stopTimeDao()
         val cancelDao = db?.cancelledTripDao()
 
         for (trains in response.data.attributes.alerts) {
             try {
                 val simpleDateFormat = SimpleDateFormat("MMMM dd, yyyy hh:mmaa", Locale.US)
+                simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
                 val alertStartDate = simpleDateFormat.parse(trains.startDate)
                 val cancelledTrains = RiderAlertUtils.toRTDStationTimeObj(trains.info, response.data.id)
                 for (cancelled in cancelledTrains) {
