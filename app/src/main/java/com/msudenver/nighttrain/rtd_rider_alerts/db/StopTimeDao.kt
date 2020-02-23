@@ -6,7 +6,7 @@ import java.util.*
 @Dao
 interface StopTimeDao {
     @Query("SELECT * FROM stoptimeentity WHERE trip_id= :trip")
-    suspend fun findByTripID(trip: Int): List<StopTimeEntity>
+    fun findByTripID(trip: Int): List<StopTimeEntity>
 
     //get next scheduled trains for departure at specific stop (note that a station may have multiple stops, see parent_station col in stopentity table
     @Query("SELECT trip_headsign as tripHeader, route_short_name AS trainName, departure_time AS time, " +
@@ -15,12 +15,14 @@ interface StopTimeDao {
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
             "INNER JOIN calendarentity ON service_id=calendarentity.id " +
             "INNER JOIN routeentity ON route_id=routeentity.id " +
+            "INNER JOIN stopentity ON stop_id=stopentity.id " +
             "WHERE arrival_time >= :time " +
-                "AND calendarentity.id = :scheduleType " +
-                "AND stop_id = :stopId " +
+            " AND (CASE :dayOfWeek WHEN 'sunday' THEN sunday WHEN 'monday' THEN monday " +
+            "WHEN 'tuesday' THEN tuesday WHEN 'wednesday' THEN wednesday WHEN 'thursday' THEN thursday WHEN 'friday' THEN friday WHEN 'saturday' THEN saturday END) = 1" +
+            " AND stop_name = :station " +
             "ORDER BY departure_time ASC " +
             "LIMIT :maxResults")
-    suspend fun getNextTrains(time: Date, scheduleType: String, stopId: Int, maxResults: Int) : List<ScheduledTrain>
+    fun getNextTrains(time: Date, dayOfWeek: String, station: String, maxResults: Int) : List<ScheduledTrain>
 
     @Query("SELECT trip_id FROM stoptimeentity " +
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
@@ -35,16 +37,16 @@ interface StopTimeDao {
             " AND stop_name = :startStation" +
             " LIMIT 1"
     )
-    suspend fun getCancelledTrip(dayOfWeek:String, startTime:Date, endTime:Date, routeName: String, startStation: String) : Int //Ridgegate Parkway Station
+    fun getCancelledTrip(dayOfWeek:String, startTime:Date, endTime:Date, routeName: String, startStation: String) : Int //Ridgegate Parkway Station
 
     @Insert
-    suspend fun insertAll(vararg stopTime: StopTimeEntity)
+    fun insertAll(vararg stopTime: StopTimeEntity)
 
     @Delete
-    suspend fun delete(stopTime: StopTimeEntity)
+    fun delete(stopTime: StopTimeEntity)
 
     @Update
-    suspend fun updateStopTime(vararg stopTime: StopTimeEntity)
+    fun updateStopTime(vararg stopTime: StopTimeEntity)
 }
 
 
