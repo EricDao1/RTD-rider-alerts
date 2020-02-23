@@ -41,13 +41,29 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
             val rightnow = Date()
-            val nowtime = Date(70,0,0,rightnow.hours,rightnow.minutes, rightnow.seconds)
-            scheduledTrains.postValue(db.stopTimeDao().getNextTrains(
+            val tomorrow = Date(rightnow.year, rightnow.month, rightnow.date + 1)//Calendar.getInstance()
+            val today = Date(rightnow.year, rightnow.month, rightnow.date) //Calendar.getInstance()
+            //today.set(today.get(Calendar.YEAR)-1900, today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH))
+            //tomorrow.set(tomorrow.get(Calendar.YEAR)-1900, tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH)+1)
+            //val nowtime = Date(70,0,0,rightnow.hours,rightnow.minutes, rightnow.seconds)
+            var nextTrains = db.stopTimeDao().getNextTrains(
                 Date(70,0,1,rightnow.hours-7,rightnow.minutes, rightnow.seconds) ,
                 RiderAlertUtils.getDayOfWeek(Date()),
                 station,
-                maxResults = 10
-            ))
+                maxResults = 20
+            )
+            val cancelledTrains = db.cancelledTripDao().getTrainsForToday(today, tomorrow)
+            for(trip in nextTrains) {
+                var isCancelled = 0
+                for(cancelledTrain in cancelledTrains) {
+                    if(cancelledTrain.tripId == trip.tripID) {
+                        isCancelled = 1
+                        break
+                    }
+                }
+                trip.cancelledAlert = isCancelled
+            }
+            scheduledTrains.postValue(nextTrains)
         }
     }
 

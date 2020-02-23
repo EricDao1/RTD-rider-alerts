@@ -1,20 +1,18 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import java.util.*
 
 @Dao
 interface CancelledTripDao {
-    @Query("SELECT * FROM cancelledtripentity WHERE day_date= :date")
-    fun getTrainsForToday(date: Date) : List<CancelledTripEntity>
+
+    @Query("DELETE FROM cancelledtripentity WHERE id NOT IN (SELECT id FROM cancelledtripentity GROUP BY trip_id, day_date)")
+    fun deleteDuplicateAlerts() : Int
+
+    @Query("SELECT * FROM cancelledtripentity WHERE day_date >= :date AND day_date <= :end_date")
+    fun getTrainsForToday(date: Date, end_date: Date) : List<CancelledTripEntity>
 
     @Insert
     fun insertAll(vararg trip: CancelledTripEntity)
-
-    @Update
-    fun updateAll(vararg trip: CancelledTripEntity)
 
 }

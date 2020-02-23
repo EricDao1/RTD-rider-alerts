@@ -9,8 +9,8 @@ interface StopTimeDao {
     fun findByTripID(trip: Int): List<StopTimeEntity>
 
     //get next scheduled trains for departure at specific stop (note that a station may have multiple stops, see parent_station col in stopentity table
-    @Query("SELECT trip_headsign as tripHeader, route_short_name AS trainName, departure_time AS time, " +
-            "route_color AS routeColor, route_text_color AS routeTextColor" +
+    @Query("SELECT trip_id AS tripID, trip_headsign as tripHeader, route_short_name AS trainName, departure_time AS time, " +
+            "route_color AS routeColor, route_text_color AS routeTextColor, 0 as cancelledAlert" +
             " FROM stoptimeentity " +
             "INNER JOIN tripentity ON trip_id=tripentity.id " +
             "INNER JOIN calendarentity ON service_id=calendarentity.id " +
@@ -51,9 +51,11 @@ interface StopTimeDao {
 
 
 class ScheduledTrain {
+    var tripID : Int = 0
     var trainName: String = ""
     var tripHeader: String = ""
     var time: Date = Date()
     var routeColor: Int = 0
     var routeTextColor: Int = 0
+    var cancelledAlert: Int = 0
 }
