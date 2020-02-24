@@ -45,9 +45,7 @@ class RiderAlertUtils {
                 when(alert.startTime<lastTrainTime) {
                     true->alert.startTime=Date(alert.startTime.time +  86400000)
                 }
-            } catch (e : ParseException) {
-                null
-            }
+            } catch (e : ParseException) {}
             if(startTimeMore.size > 1) {
                 val fromStationMore = startTimeMore[1].split(" to ")
                 alert.fromStation = fromStationMore[0]

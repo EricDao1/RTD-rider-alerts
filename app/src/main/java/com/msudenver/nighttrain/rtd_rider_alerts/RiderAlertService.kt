@@ -96,7 +96,7 @@ class RiderAlertService : Service() {
                             startStation = cancelled.fromStation,
                             routeName = response.data.id)
                     if(tripID!=null) {
-                        var cancelledTrip = CancelledTripEntity(
+                        val cancelledTrip = CancelledTripEntity(
                             tripId = tripID,
                             dayDate = alertStartDate
                         )
@@ -107,7 +107,7 @@ class RiderAlertService : Service() {
                     }
                 }
             } catch (e : ParseException) {
-                null
+
             }
         }
     }
