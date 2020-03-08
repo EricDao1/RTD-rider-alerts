@@ -19,7 +19,7 @@ import kotlinx.coroutines.*
 class RiderAlertService : Service() {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
-    private val TAG = "riderService"
+    private val tag = "riderService"
     private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/" //C
 
 
@@ -28,7 +28,7 @@ class RiderAlertService : Service() {
             //super.handleMessage(msg)
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
             val db = RTDDatabase.invoke(applicationContext)
-            GlobalScope.async {
+            GlobalScope.launch {
                 val routeDao = db.routeDao()
                 val trainRoutes = routeDao.getTrainRoutes()
                 for(trainRoute in trainRoutes) {
@@ -73,7 +73,7 @@ class RiderAlertService : Service() {
         val alertsRequest = GsonRequest(newUrl, RTDAlertData::class.java, null, Response.Listener {
                 response -> GlobalScope.launch {processAlerts(response, db)}
         },
-            Response.ErrorListener { error -> Log.v(TAG, "download error $error") }
+            Response.ErrorListener { error -> Log.v(tag, "download error $error") }
         )
         requestQueue.add(alertsRequest)
     }
@@ -102,7 +102,7 @@ class RiderAlertService : Service() {
                         )
                         when (cancelledTrip.tripId > 0) {
                             true -> cancelDao?.insertAll(cancelledTrip)
-                            false -> Log.v(TAG, "no trip found: input of: $cancelled")
+                            false -> Log.v(tag, "no trip found: input of: $cancelled")
                         }
                     }
                 }
