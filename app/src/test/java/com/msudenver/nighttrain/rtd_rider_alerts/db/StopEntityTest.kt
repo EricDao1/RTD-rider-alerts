@@ -8,7 +8,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.bouncycastle.asn1.x500.style.RFC4519Style.name
 import org.junit.After
 import org.junit.Before
 
