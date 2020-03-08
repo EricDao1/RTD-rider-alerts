@@ -39,6 +39,11 @@ jobs:
       - run:
           name: Store Google Service Account
           command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+      
+      ## firebase tessting
+      - run:
+          name: Decode Google Services key
+          command: echo $GOOGLE_SERVICES_FILE | base64 -di > app/google-services.json
       - run:
           name: Authorize gcloud and set config defaults
           command: |
@@ -53,6 +58,9 @@ jobs:
           command: |
             sudo pip install -U crcmod
             sudo gsutil -m cp -r -U `sudo gsutil ls gs://rtd-alerts-android-app/tests/${CIRCLE_BUILD_NUM}/ | tail -1` ${CIRCLE_ARTIFACTS}/ | true
+      
+      ## coverage
+      
       - run:
           name: Move Firebase coverage report
           command: |
