@@ -35,7 +35,6 @@ class GsonRequest<T>(
         } catch (e: UnsupportedEncodingException) {
             Response.error(ParseError(e))
         } catch (e: JsonSyntaxException) {
-            Log.v("RTD", e.toString())
             Response.error(ParseError(e))
         }
     }
