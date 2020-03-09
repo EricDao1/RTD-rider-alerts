@@ -1,5 +1,6 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
+import android.util.Log
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -12,6 +13,8 @@ class RiderAlertUtils {
     override fun toString() : String = "$fromStation via $routeName at $startTime"
 
     companion object {
+        private val tag = "RiderAlertUtils"
+
         //Function to split large delay into individual strings of delayed trains:
         /*Input :
         "C Line Trip 6:11 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled today due to operator shortage.<br>
@@ -37,7 +40,6 @@ class RiderAlertUtils {
             val alert = RiderAlertUtils()
             val startTimeMore = info.split(" from ")
             val lastTrainTime = Date(Date.UTC(70,0,1,3,30,0))
-            //val lastTrainTime = Date(70,0,1,3,30,0)
             try {
                 val simpleDateFormat = SimpleDateFormat("hh:mm aa")
                 simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -45,7 +47,7 @@ class RiderAlertUtils {
                 when(alert.startTime<lastTrainTime) {
                     true->alert.startTime=Date(alert.startTime.time +  86400000)
                 }
-            } catch (e : ParseException) {}
+            } catch (e : ParseException) { Log.d(tag, e.toString())}
             if(startTimeMore.size > 1) {
                 val fromStationMore = startTimeMore[1].split(" to ")
                 alert.fromStation = fromStationMore[0]

@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest {
+class TestMainActivity {
 
     @get:Rule
     val activityScenarioRule : ActivityScenarioRule<MainActivity> =
@@ -25,6 +25,11 @@ class MainActivityTest {
         /*onView(withText("Osage"))
             .perform(click())
         onView(ViewMatchers.withId(R.id.recycler_view))*/
+    }
+
+    @Test
+    fun onRotateKeepValues() {
+
     }
 
 }

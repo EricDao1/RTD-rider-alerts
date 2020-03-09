@@ -7,9 +7,4 @@ class RTDAlert(
     var info: String = "",
     var startDate: String = "",
     var endDate: String = ""
-) {
-    override fun toString() : String {
-        return "Info" + info + "startDate: " + startDate + "endDate: " + endDate
-    }
-
-}
+)

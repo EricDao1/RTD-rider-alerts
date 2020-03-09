@@ -1,11 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
-apply plugin: 'jacoco-android'
+//apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+jacoco {
+    toolVersion = '0.8.0'
+}
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -21,11 +24,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            testCoverageEnabled true
         }
         debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testCoverageEnabled true
         }
 
@@ -36,6 +37,9 @@ android {
         exclude 'META-INF/proguard/coroutines.pro'
     }
     testOptions {
+        //execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled true
+        unitTests.includeAndroidResources = true
         unitTests.all {
             jacoco {
                 includeNoLocationClasses = true
@@ -59,7 +63,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    //implementation 'com.google.firebase:firebase-analytics:17.2.2'
 
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -75,13 +79,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     // espresso testing
-    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion;
+    androidTestUtil 'com.android.support.test:orchestrator:1.1.0'
+    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
     androidTestImplementation 'androidx.test:runner:1.1.0'
-    //androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion;
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:' + rootProject.espressoVersion;
-
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:' + rootProject.espressoVersion
 
     //regular testing
     testImplementation "androidx.arch.core:core-testing:2.1.0"
@@ -98,14 +102,44 @@ dependencies {
     testImplementation 'org.robolectric:robolectric:4.3.1'
     //?? https://stackoverflow.com/questions/53619024/attempted-to-use-androidjunit4-with-standard-junit-runner-and-delegate-runner-o
     // Optional -- Mockito framework
-    testImplementation 'org.mockito:mockito-core:2.11.0'
+    //testImplementation 'org.mockito:mockito-core:2.11.0'
 
     implementation 'com.android.support:recyclerview-v7:28.0.0'
 }
 
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled true
-    xml.enabled true
-}
+//https://medium.com/@rafael_toledo/setting-up-an-unified-coverage-report-in-android-with-jacoco-robolectric-and-espresso-ffe239aaf3fa
+//https://proandroiddev.com/unified-code-coverage-for-android-revisited-44789c9b722f
+//https://github.com/mubstimor/integrationsdemo/blob/master/app/jacoco.gradle
+//https://medium.com/@timothy.mubiru/automating-android-app-development-with-circleci-google-cloud-and-firebase-in-kotlin-e1daec7b6b4e
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group="Reporting"
+    description="Generate Jacoco coverage reports for debug build"
 
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def excludes = ['**/R.class',
+                    '**/R$*.class',
+                    '**/*$ViewBinder*.*',
+                    '**/*$InjectAdapter*.*',
+                    '**/*Injector*.*',
+                    '**/BuildConfig.*',
+                    '**/Manifest*.*',
+                    '**/*Test*.*',
+                    '**/*Activity*.*',
+                    '**/CiMattersApplication*.*',
+                    'android/**/*.*']
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: excludes)
+    def kotlinDebugTree = fileTree(dir: "$buildDir/tmp/kotlin-classes/debug", excludes: excludes)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree],[kotlinDebugTree])
+    executionData.from = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
