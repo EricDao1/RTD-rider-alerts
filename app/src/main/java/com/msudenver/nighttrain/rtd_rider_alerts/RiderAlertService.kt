@@ -37,7 +37,6 @@ class RiderAlertService : Service() {
                 db.cancelledTripDao().deleteDuplicateAlerts()
             }
             Thread.sleep(10000)
-            //stopSelf(msg!!.arg1)
         }
     }
 
@@ -107,7 +106,7 @@ class RiderAlertService : Service() {
                     }
                 }
             } catch (e : ParseException) {
-
+                Log.d(tag, e.toString())
             }
         }
     }
