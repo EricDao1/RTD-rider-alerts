@@ -55,7 +55,6 @@ class RiderAlertUtils {
             return alert
         }
 
-
         fun getDayOfWeek(alertStart:Date) : String {
             var schedule = ""
 

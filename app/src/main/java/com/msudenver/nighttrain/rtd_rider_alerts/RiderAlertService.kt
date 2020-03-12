@@ -23,7 +23,6 @@ class RiderAlertService : Service() {
     private val tag = "riderService"
     private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/" //C
 
-
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message?) {
             //super.handleMessage(msg)
