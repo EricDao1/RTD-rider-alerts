@@ -4,10 +4,16 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.volley.Network
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.ResponseDelivery
+import com.android.volley.toolbox.NoCache
 import com.google.common.truth.Truth
 import com.msudenver.nighttrain.rtd_rider_alerts.db.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.*
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -118,6 +124,24 @@ class RiderAlertServiceTest {
         val tomorrow = Date(Date.UTC(120,1,23,0,0,0))
 
         Truth.assertThat(db.cancelledTripDao().getTrainsForToday(today, tomorrow).size).isEqualTo(20)
+    }
+
+    @Test
+    fun testDownloadAlerts() {
+        val riderAlertService = RiderAlertService()
+        /*val requestListener = mock(RequestQueue::class.java)
+        val mNetwork = mock(Network::class.java)
+        val mDelivery = mock(ResponseDelivery::class.java)
+        val request = RequestQueue(NoCache(), mNetwork, 0, mDelivery)*/
+        val request = mock(RequestQueue::class.java)
+        val db = Room.inMemoryDatabaseBuilder(
+            context, RTDDatabase::class.java).allowMainThreadQueries().build()
+
+        /* When */
+        riderAlertService.downloadRTDAlerts("C", db, request)
+
+        /* Then */
+        verify(request, times(1)).add(any(GsonRequest::class.java))
     }
 
 }

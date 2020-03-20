@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import androidx.annotation.VisibleForTesting
+import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
@@ -22,17 +23,17 @@ class RiderAlertService : Service() {
     private val tag = "riderService"
     private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/" //C
 
-
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message?) {
             //super.handleMessage(msg)
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
             val db = RTDDatabase.invoke(applicationContext)
+            val queue = Volley.newRequestQueue(applicationContext)
             GlobalScope.launch {
                 val routeDao = db.routeDao()
                 val trainRoutes = routeDao.getTrainRoutes()
                 for(trainRoute in trainRoutes) {
-                    downloadRTDAlerts(trainRoute.name, db)
+                    downloadRTDAlerts(trainRoute.name, db, queue)
                 }
                 db.cancelledTripDao().deleteDuplicateAlerts()
             }
@@ -61,13 +62,13 @@ class RiderAlertService : Service() {
         return START_STICKY
     }
 
-    @VisibleForTesting
-    private fun downloadRTDAlerts(route: String, db: RTDDatabase) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun downloadRTDAlerts(route: String, db: RTDDatabase, requestQueue: RequestQueue) {
         val newUrl = url + route
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
 
-        val requestQueue = Volley.newRequestQueue(applicationContext)
+        //val requestQueue = Volley.newRequestQueue(applicationContext)
 
         val alertsRequest = GsonRequest(newUrl, RTDAlertData::class.java, null, Response.Listener {
                 response -> GlobalScope.launch {processAlerts(response, db)}

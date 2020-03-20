@@ -1,6 +1,7 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Request
@@ -24,21 +25,31 @@ class GsonRequest<T>(
     override fun deliverResponse(response: T) = listener.onResponse(response)
 
     override fun parseNetworkResponse(response: NetworkResponse?): Response<T> {
+        return implementParseNetworkResponse(response)
+    }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun testDeliverResponse(response: T) = deliverResponse(response)
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun testParseNetworkResponse(response: NetworkResponse?) : Response<T> {
+        return parseNetworkResponse(response)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun implementParseNetworkResponse(response: NetworkResponse?): Response<T> {
         return try {
             val json = String(
                 response?.data ?: ByteArray(0),
-                Charset.forName(HttpHeaderParser.parseCharset(response?.headers)))
+                Charset.forName(HttpHeaderParser.parseCharset(response?.headers))
+            )
             Response.success(
                 Gson().fromJson(json, clazz),
-                HttpHeaderParser.parseCacheHeaders(response))
-        } catch (e: UnsupportedEncodingException) {
-            Response.error(ParseError(e))
+                HttpHeaderParser.parseCacheHeaders(response)
+            )
         } catch (e: JsonSyntaxException) {
-            Log.v("RTD", e.toString())
             Response.error(ParseError(e))
         }
     }
-
 
 }

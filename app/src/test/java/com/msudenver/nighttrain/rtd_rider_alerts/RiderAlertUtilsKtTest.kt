@@ -56,10 +56,50 @@ class RiderAlertUtilsKtTest {
     fun getDayOfWeekAfter() {
         val simpleDateFormat = SimpleDateFormat("MMMM dd, yyyy hh:mmaa", Locale.US)
         val alertStartDate = simpleDateFormat.parse("February 14, 2020 2:26PM")
-
         val day = RiderAlertUtils.getDayOfWeek(alertStartDate)
-
         Truth.assertThat(day).isEqualTo("friday")
+    }
 
+    @Test
+    fun checkSunday() {
+        getDayOfWeekAfterHelper("March 8, 2020 2:26PM", "sunday")
+    }
+
+    @Test
+    fun checkMonday() {
+        getDayOfWeekAfterHelper("March 9, 2020 2:26PM", "monday")
+    }
+
+    @Test
+    fun checkTuesday() {
+        getDayOfWeekAfterHelper("March 10, 2020 2:26PM", "tuesday")
+    }
+
+    @Test
+    fun checkWednesday() {
+        getDayOfWeekAfterHelper("March 11, 2020 2:26PM", "wednesday")
+    }
+
+    @Test
+    fun checkThursday() {
+        getDayOfWeekAfterHelper("March 12, 2020 2:26PM", "thursday")
+    }
+
+    private fun getDayOfWeekAfterHelper(date: String, day: String) {
+        val simpleDateFormat = SimpleDateFormat("MMMM dd, yyyy hh:mmaa", Locale.US)
+        val alertStartDate = simpleDateFormat.parse(date)
+        val day = RiderAlertUtils.getDayOfWeek(alertStartDate)
+        Truth.assertThat(day).isEqualTo(day)
+    }
+
+    @Test
+    fun testToString() {
+        val now = Calendar.getInstance()
+        val nowDate = now.time
+        var util = RiderAlertUtils()
+        util.fromStation = "AaA"
+        util.routeName = "cC"
+        util.startTime = now.time
+        Truth.assertThat(util.toString()).isEqualTo("AaA via cC at $nowDate")
     }
 }
