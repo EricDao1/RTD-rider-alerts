@@ -8,15 +8,4 @@ class RTDAlertAttribute(
     var displayName: String = "",
     var routeType: String = "",
     var alerts: List<RTDAlert>
-) {
-
-    override fun toString(): String {
-        var sb = StringBuilder()
-
-        for (value in this.alerts) {
-            sb.append(value)
-            sb.append("\n\n")
-        }
-        return sb.toString()
-    }
-}
+)

@@ -27,6 +27,7 @@ class StopTimeEntityTest {
     private lateinit var tripDao: TripDao
     private lateinit var routeDao: RouteDao
     private lateinit var calendarDao: CalendarDao
+    private val goingWest = "Vehicles Travelling West"
 
     private lateinit var db: RTDDatabase
     private val context: Context = ApplicationProvider.getApplicationContext()
@@ -98,7 +99,7 @@ class StopTimeEntityTest {
                 lat = "",
                 lon = "",
                 parentStation = 34109,
-                description = "Vehicles Travelling West"
+                description = goingWest
             )
             val tripEntity1 = TripEntity(
                 id = 113107684,
@@ -143,86 +144,89 @@ class StopTimeEntityTest {
     @Test
     fun findCancelledTrain() {
 
+        val eline = "E-Line Union Station"
+        val ridgeway = "Ridgegate Parkway Station"
+
             val trip1 = TripEntity(
                 id = 113109947,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip2 = TripEntity(
                 id = 113109953,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip3 = TripEntity(
                 id = 113109956,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip4 = TripEntity(
                 id = 113109959,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip5 = TripEntity(
                 id = 113109962,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip6 = TripEntity(
                 id = 113109967,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip7 = TripEntity(
                 id = 113109968,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip8 = TripEntity(
                 id = 113109973,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip9 = TripEntity(
                 id = 113109976,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip10 = TripEntity(
                 id = 113109979,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip11 = TripEntity(
                 id = 113109981,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SU",
                 directionId = 0
             )
             val trip12 = TripEntity(
                 id = 113109247,
-                description = "E-Line Union Station",
+                description = eline,
                 routeId = "101E",
                 serviceId = "SA",
                 directionId = 0
@@ -293,19 +297,19 @@ class StopTimeEntityTest {
 
             val stop0 = StopEntity(
                 id = 35211,
-                name = "Ridgegate Parkway Station",
+                name = ridgeway,
                 lat = "39.520244",
                 lon = "-104.865725",
                 parentStation = 35245,
-                description = "Vehicles Travelling West"
+                description = goingWest
             )
             val stop1 = StopEntity(
                 id = 35212,
-                name = "Ridgegate Parkway Station",
+                name = ridgeway,
                 lat = "39.520791",
                 lon = "-104.86521",
                 parentStation = 35245,
-                description = "Vehicles Travelling West"
+                description = goingWest
             )
 
             stopDao.insertAll(stop0, stop1)
@@ -408,7 +412,7 @@ class StopTimeEntityTest {
                 Date(70, 0, 1, 15, 40),
                 Date(70, 0, 1, 15, 42),
                 "E",
-                "Ridgegate Parkway Station"
+                ridgeway
             ) //"sunday",
             Truth.assertThat(cancelledTrip).isEqualTo(113109956)
     }

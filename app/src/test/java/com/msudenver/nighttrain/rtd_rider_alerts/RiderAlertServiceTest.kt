@@ -4,10 +4,16 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.volley.Network
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.ResponseDelivery
+import com.android.volley.toolbox.NoCache
 import com.google.common.truth.Truth
 import com.msudenver.nighttrain.rtd_rider_alerts.db.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.*
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +52,8 @@ class RiderAlertServiceTest {
         val riderAlerts = RiderAlerts(type="alert-routes",id="C",attributes = alertAttribute)
         val alertData = RTDAlertData(data=riderAlerts)
         val riderAlertService = RiderAlertService()
+        val clineMineral = "C-Line Mineral"
+        val cLineUnion = "C-Line Union Station"
 
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
@@ -65,26 +73,26 @@ class RiderAlertServiceTest {
         db.stopDao().insertAll(stop,stop2)
 
         //inject trips
-        val tripEntity1 = TripEntity(id = 113107730,routeId = "101C",description = "C-Line Union Station",serviceId = "FR",directionId = 0)
-        val tripEntity2 = TripEntity(id = 113107812,routeId = "101C",description = "C-Line Union Station",serviceId = "FR",directionId = 0)
-        val tripEntity3 = TripEntity(id = 113107852,routeId = "101C",description = "C-Line Union Station",serviceId = "FR",directionId = 0)
-        val tripEntity4 = TripEntity(id = 113107993,routeId = "101C",description = "C-Line Union Station",serviceId = "FR",directionId = 0)
-        val tripEntity5 = TripEntity(id = 113108006,routeId = "101C",description = "C-Line Union Station",serviceId = "FR",directionId = 0)
-        val tripEntity6 = TripEntity(id = 113108144,routeId = "101C",description = "C-Line Mineral",serviceId = "FR",directionId = 0)
-        val tripEntity7 = TripEntity(id = 113108181,routeId = "101C",description = "C-Line Mineral",serviceId = "FR",directionId = 0)
-        val tripEntity8 = TripEntity(id = 113108196,routeId = "101C",description = "C-Line Mineral",serviceId = "FR",directionId = 0)
-        val tripEntity9 = TripEntity(id = 113108297,routeId = "101C",description = "C-Line Mineral",serviceId = "FR",directionId = 0)
-        val tripEntity10 = TripEntity(id = 113108451,routeId = "101C",description = "C-Line Mineral",serviceId = "FR",directionId = 0)
-        val tripEntity11 = TripEntity(id = 113109439,routeId = "101C",description = "C-Line Union Station",serviceId = "SA",directionId = 0)
-        val tripEntity12 = TripEntity(id = 113109487,routeId = "101C",description = "C-Line Union Station",serviceId = "SA",directionId = 0)
-        val tripEntity13 = TripEntity(id = 113109491,routeId = "101C",description = "C-Line Union Station",serviceId = "SA",directionId = 0)
-        val tripEntity14 = TripEntity(id = 113109493,routeId = "101C",description = "C-Line Union Station",serviceId = "SA",directionId = 0)
-        val tripEntity15 = TripEntity(id = 113109495,routeId = "101C",description = "C-Line Union Station",serviceId = "SA",directionId = 0)
-        val tripEntity16 = TripEntity(id = 113109548,routeId = "101C",description = "C-Line Mineral",serviceId = "SA",directionId = 0)
-        val tripEntity17 = TripEntity(id = 113109551,routeId = "101C",description = "C-Line Mineral",serviceId = "SA",directionId = 0)
-        val tripEntity18 = TripEntity(id = 113109556,routeId = "101C",description = "C-Line Mineral",serviceId = "SA",directionId = 0)
-        val tripEntity19 = TripEntity(id = 113109562,routeId = "101C",description = "C-Line Mineral",serviceId = "SA",directionId = 0)
-        val tripEntity20 = TripEntity(id = 113109633,routeId = "101C",description = "C-Line Mineral",serviceId = "SA",directionId = 0)
+        val tripEntity1 = TripEntity(id = 113107730,routeId = "101C",description = cLineUnion,serviceId = "FR",directionId = 0)
+        val tripEntity2 = TripEntity(id = 113107812,routeId = "101C",description = cLineUnion,serviceId = "FR",directionId = 0)
+        val tripEntity3 = TripEntity(id = 113107852,routeId = "101C",description = cLineUnion,serviceId = "FR",directionId = 0)
+        val tripEntity4 = TripEntity(id = 113107993,routeId = "101C",description = cLineUnion,serviceId = "FR",directionId = 0)
+        val tripEntity5 = TripEntity(id = 113108006,routeId = "101C",description = cLineUnion,serviceId = "FR",directionId = 0)
+        val tripEntity6 = TripEntity(id = 113108144,routeId = "101C",description = clineMineral,serviceId = "FR",directionId = 0)
+        val tripEntity7 = TripEntity(id = 113108181,routeId = "101C",description = clineMineral,serviceId = "FR",directionId = 0)
+        val tripEntity8 = TripEntity(id = 113108196,routeId = "101C",description = clineMineral,serviceId = "FR",directionId = 0)
+        val tripEntity9 = TripEntity(id = 113108297,routeId = "101C",description = clineMineral,serviceId = "FR",directionId = 0)
+        val tripEntity10 = TripEntity(id = 113108451,routeId = "101C",description = clineMineral,serviceId = "FR",directionId = 0)
+        val tripEntity11 = TripEntity(id = 113109439,routeId = "101C",description = cLineUnion,serviceId = "SA",directionId = 0)
+        val tripEntity12 = TripEntity(id = 113109487,routeId = "101C",description = cLineUnion,serviceId = "SA",directionId = 0)
+        val tripEntity13 = TripEntity(id = 113109491,routeId = "101C",description = cLineUnion,serviceId = "SA",directionId = 0)
+        val tripEntity14 = TripEntity(id = 113109493,routeId = "101C",description = cLineUnion,serviceId = "SA",directionId = 0)
+        val tripEntity15 = TripEntity(id = 113109495,routeId = "101C",description = cLineUnion,serviceId = "SA",directionId = 0)
+        val tripEntity16 = TripEntity(id = 113109548,routeId = "101C",description = clineMineral,serviceId = "SA",directionId = 0)
+        val tripEntity17 = TripEntity(id = 113109551,routeId = "101C",description = clineMineral,serviceId = "SA",directionId = 0)
+        val tripEntity18 = TripEntity(id = 113109556,routeId = "101C",description = clineMineral,serviceId = "SA",directionId = 0)
+        val tripEntity19 = TripEntity(id = 113109562,routeId = "101C",description = clineMineral,serviceId = "SA",directionId = 0)
+        val tripEntity20 = TripEntity(id = 113109633,routeId = "101C",description = clineMineral,serviceId = "SA",directionId = 0)
         db.tripDao().insertAll(tripEntity1, tripEntity2, tripEntity3, tripEntity4, tripEntity5, tripEntity6, tripEntity7, tripEntity8, tripEntity9, tripEntity10, tripEntity11, tripEntity12, tripEntity13, tripEntity14, tripEntity15, tripEntity16, tripEntity17, tripEntity18, tripEntity19, tripEntity20)
 
         //inject stoptimes
@@ -116,6 +124,24 @@ class RiderAlertServiceTest {
         val tomorrow = Date(Date.UTC(120,1,23,0,0,0))
 
         Truth.assertThat(db.cancelledTripDao().getTrainsForToday(today, tomorrow).size).isEqualTo(20)
+    }
+
+    @Test
+    fun testDownloadAlerts() {
+        val riderAlertService = RiderAlertService()
+        /*val requestListener = mock(RequestQueue::class.java)
+        val mNetwork = mock(Network::class.java)
+        val mDelivery = mock(ResponseDelivery::class.java)
+        val request = RequestQueue(NoCache(), mNetwork, 0, mDelivery)*/
+        val request = mock(RequestQueue::class.java)
+        val db = Room.inMemoryDatabaseBuilder(
+            context, RTDDatabase::class.java).allowMainThreadQueries().build()
+
+        /* When */
+        riderAlertService.downloadRTDAlerts("C", db, request)
+
+        /* Then */
+        verify(request, times(1)).add(any(GsonRequest::class.java))
     }
 
 }

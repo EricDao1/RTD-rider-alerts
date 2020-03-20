@@ -3,6 +3,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.lifecycle.Observer
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         val stationsSpinner = findViewById<Spinner>(R.id.stations_spinner)
+        stationsSpinner.onItemSelectedListener = this
 
         viewModel = ViewModelProvider(this).get(TrainScheduleViewModel::class.java)
         viewModel.stationNames.observe(this, Observer { stations ->
@@ -33,7 +35,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, stations)
             stationsList = stations
             stationsSpinner.adapter = stationsAdapter
-            stationsSpinner.onItemSelectedListener = this
         })
 
         viewModel.scheduledTrains.observe(this, Observer { scheduledTrains ->
@@ -48,10 +49,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        viewModel.setStationNames(stationsList.get(pos))
+        Log.v(tag, "in onItemSelected")
+        if(stationsList.isNotEmpty()) {
+            Log.v(tag, "setting pos")
+            viewModel.setStationNames(stationsList[pos])
+        }
 
     }
     override fun onNothingSelected(parent: AdapterView<*>) {
