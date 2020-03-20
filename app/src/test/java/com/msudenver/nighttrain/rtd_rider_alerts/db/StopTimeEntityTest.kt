@@ -1,7 +1,6 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 import android.content.Context
-import android.icu.util.Calendar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -78,8 +77,9 @@ class StopTimeEntityTest {
     fun insertRead() {
 
         val rightnow = Calendar.getInstance()
+        rightnow.set(Calendar.MILLISECOND,0)
 
-        rightnow.set(70 , 0, 1, 10,1, 30)
+        rightnow.set(1970 , 0, 1, 10,1, 30)
 
             val stopTime = StopTimeEntity(
                 id = 10,
@@ -120,7 +120,7 @@ class StopTimeEntityTest {
             tripDao.insertAll(tripEntity1)
             stopTimeDao.insertAll(stopTime)
 
-            rightnow.set(70 , 0, 1, 10,1, 0)
+            rightnow.set(1970 , 0, 1, 10,1, 0)
 
             val scheduledTrain = stopTimeDao.getNextTrains(
                 maxResults = 1,
@@ -311,7 +311,7 @@ class StopTimeEntityTest {
             stopDao.insertAll(stop0, stop1)
 
             val rightnow = Calendar.getInstance()
-            rightnow.set(70 , 0, 1, 10,1, 30)
+            rightnow.set(1970 , 0, 1, 10,1, 30)
             val stopTime1 = StopTimeEntity(
                 tripId = 113107809,
                 arrivalTime = rightnow.time,
@@ -321,7 +321,7 @@ class StopTimeEntityTest {
                 stopId = 35212,
                 stopSequence = 1
             )
-            rightnow.set(70 , 0, 1, 15,40, 15)
+            rightnow.set(1970 , 0, 1, 15,40, 15)
             val stopTime2 = StopTimeEntity(
                 tripId = 113108347,
                 arrivalTime = rightnow.time,
@@ -331,7 +331,7 @@ class StopTimeEntityTest {
                 stopId = 35211,
                 stopSequence = 22
             )
-            rightnow.set(70 , 0, 1, 15,42, 0)
+            rightnow.set(1970 , 0, 1, 15,42, 0)
             val stopTime3 = StopTimeEntity(
                 tripId = 113108518,
                 arrivalTime = rightnow.time,
@@ -341,7 +341,7 @@ class StopTimeEntityTest {
                 stopId = 35212,
                 stopSequence = 1
             )
-            rightnow.set(70 , 0, 1, 15,40, 15)
+            rightnow.set(1970 , 0, 1, 15,40, 15)
             val stopTime4 = StopTimeEntity(
                 tripId = 113108917,
                 arrivalTime = rightnow.time,
@@ -351,7 +351,7 @@ class StopTimeEntityTest {
                 stopId = 35211,
                 stopSequence = 22
             )
-            rightnow.set(70 , 0, 1, 15,41, 0)
+            rightnow.set(1970 , 0, 1, 15,41, 0)
             val stopTime5 = StopTimeEntity(
                 tripId = 113109247,
                 arrivalTime = rightnow.time,
@@ -361,7 +361,7 @@ class StopTimeEntityTest {
                 stopId = 35212,
                 stopSequence = 1
             )
-            rightnow.set(70 , 0, 1, 15,41, 15)
+            rightnow.set(1970 , 0, 1, 15,41, 15)
             val stopTime6 = StopTimeEntity(
                 tripId = 113109605,
                 arrivalTime = rightnow.time,
@@ -371,7 +371,7 @@ class StopTimeEntityTest {
                 stopId = 35211,
                 stopSequence = 21
             )
-            rightnow.set(70 , 0, 1, 15,41, 0)
+            rightnow.set(1970 , 0, 1, 15,41, 0)
             val stopTime7 = StopTimeEntity(
                 tripId = 113109956,
                 arrivalTime = rightnow.time,
@@ -381,7 +381,7 @@ class StopTimeEntityTest {
                 stopId = 35212,
                 stopSequence = 1
             )
-            rightnow.set(70 , 0, 1, 15,41, 15)
+            rightnow.set(1970 , 0, 1, 15,41, 15)
             val stopTime8 = StopTimeEntity(
                 tripId = 113110087,
                 arrivalTime = rightnow.time,
@@ -402,7 +402,7 @@ class StopTimeEntityTest {
                 stopTime7,
                 stopTime8
             )
-            
+
             val cancelledTrip = stopTimeDao.getCancelledTrip(
                 "sunday",
                 Date(70, 0, 1, 15, 40),
