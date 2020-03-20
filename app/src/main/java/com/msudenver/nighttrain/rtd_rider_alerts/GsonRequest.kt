@@ -29,6 +29,14 @@ class GsonRequest<T>(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun testDeliverResponse(response: T) = deliverResponse(response)
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun testParseNetworkResponse(response: NetworkResponse?) : Response<T> {
+        return parseNetworkResponse(response)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun implementParseNetworkResponse(response: NetworkResponse?): Response<T> {
         return try {
             val json = String(
