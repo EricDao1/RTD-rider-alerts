@@ -19,7 +19,7 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
             val textDestination = view.findViewById<TextView>(R.id.textDestination)
             val textLine = view.findViewById<TextView>(R.id.textLine)
             val textTime = view.findViewById<TextView>(R.id.textTime)
-            val formatter = SimpleDateFormat("hh:mm")
+            val formatter = SimpleDateFormat("hh:mm aa")
             var mtDate = Calendar.getInstance()
             mtDate.timeInMillis = scheduledTrain.time.time + 7*60*60*1000 //7 hours in milliseconds :(
 

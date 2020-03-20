@@ -40,20 +40,17 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
             val rightnow = Calendar.getInstance()
+            val timerightnow = Calendar.getInstance()
+            timerightnow.set(1970, 0, 1, (rightnow.get(Calendar.HOUR_OF_DAY)-7), (rightnow.get(Calendar.MINUTE)) )
             rightnow.set(rightnow.get(Calendar.YEAR) , (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH)), 0, 0)
-            val rightnowUTC = Date(rightnow.time.time % 24*3600*1000 - 7*3600000)
-
             rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH ) +1), 0,0)
             val tomorrow = rightnow.time
-
-           // val tomorrow = Date(rightnow.year, rightnow.month, rightnow.date + 1)//Calendar.getInstance()
-
             rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) -1), 0, 0)
             val today = rightnow.time
 
 
             var nextTrains = db.stopTimeDao().getNextTrains(
-                rightnowUTC, RiderAlertUtils.getDayOfWeek(Date()),
+                timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
                 station,
                 maxResults = 20
             )
