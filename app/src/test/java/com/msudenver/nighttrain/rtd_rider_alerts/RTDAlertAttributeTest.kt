@@ -36,8 +36,8 @@ class RTDAlertAttributeTest {
         Truth.assertThat(alertData.data.id).isEqualTo("LPD")
 
         Truth.assertThat(alertData.data.attributes.routeID).isEqualTo(routeID)
-        Truth.assertThat(alertData.data.attributes.routeName).isEqualTo("KJFLDJFL")
-        Truth.assertThat(alertData.data.attributes.displayName).isEqualTo("JFLKDJL")
+        Truth.assertThat(alertData.data.attributes.routeName).isEqualTo("kjfldjfl")
+        Truth.assertThat(alertData.data.attributes.displayName).isEqualTo("jflkdjl")
         Truth.assertThat(alertData.data.attributes.routeType).isEqualTo("kfjldkj")
         Truth.assertThat(alertData.data.attributes.alerts).isEqualTo(alerts)
 
