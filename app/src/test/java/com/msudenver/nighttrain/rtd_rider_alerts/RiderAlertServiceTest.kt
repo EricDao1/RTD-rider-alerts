@@ -35,8 +35,15 @@ class RiderAlertServiceTest {
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
         riderAlertService.processAlerts(alertData, db)
-        val today = Date(2020,1,21)
-        val tomorrow = Date(2020,1,22)
+       // val today = Date(2020,1,21)
+       // val tomorrow = Date(2020,1,22)
+
+
+        val rightnow = Calendar.getInstance()
+        rightnow.set(rightnow.get(Calendar.YEAR) , (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) -1), 0, 0)
+        val today = rightnow.time
+        rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH ) +1), 0,0)
+        val tomorrow = rightnow.time
 
         Truth.assertThat(db.cancelledTripDao().getTrainsForToday(today,tomorrow)).isEmpty()
     }

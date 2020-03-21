@@ -44,10 +44,16 @@ class CancelledTripEntityTest {
     }
     @Test
     fun deleteDuplicateRiderAlerts() {
-        //val calendar = Calendar.getInstance()
-        //calendar.set(70,0,1,12,0,0)
-        val calendar = Date(70,0,1)
-        val calendar2 = Date(70,0,2)
+
+        //val calendar = Date(70,0,1)
+        //val calendar2 = Date(70,0,2)
+
+        val rightnow = Calendar.getInstance()
+
+        rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH )), 0,0)
+        val calendar = rightnow.time
+        rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) +1), 0, 0)
+        val calendar2 = rightnow.time
 
         val trip = TripEntity(id=100, description = "something",routeId = "A", serviceId = "SA", directionId = 0)
         val trip2 = TripEntity(id=101, description = "something",routeId = "A", serviceId = "SA", directionId = 0)

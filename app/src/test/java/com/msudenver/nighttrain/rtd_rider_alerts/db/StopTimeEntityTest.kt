@@ -87,8 +87,6 @@ class StopTimeEntityTest {
                 tripId = 113107684,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 10, 1, 30),
-                //departureTime = Date(70, 0, 1, 10, 1, 30),
                 stopId = 23043,
                 stopSequence = 8
             )
@@ -108,12 +106,12 @@ class StopTimeEntityTest {
                 serviceId = "FR",
                 directionId = 0
             )
+
+        rightnow.set(1970 , 0, 1, 10,1, 30)
             val scheduledTrainExpected = ScheduledTrain()
-
-
             scheduledTrainExpected.routeColor = 0xF79239
             scheduledTrainExpected.routeTextColor = 0xFFFFFF
-            scheduledTrainExpected.time = Date(70, 0, 1, 10, 1, 30)
+            scheduledTrainExpected.time = rightnow.time
             scheduledTrainExpected.trainName = "C"
             scheduledTrainExpected.tripHeader = "C-Line Union Station"
 
@@ -128,7 +126,6 @@ class StopTimeEntityTest {
                 dayOfWeek = "friday",
                 station = "10th & Osage Station",
                 time = rightnow.time
-                //time = Date(70, 0, 1, 10, 1, 0)
             )
             Truth.assertThat(scheduledTrain[0].time).isEqualTo(scheduledTrainExpected.time)
             Truth.assertThat(scheduledTrain[0].routeColor)
@@ -320,8 +317,6 @@ class StopTimeEntityTest {
                 tripId = 113107809,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                //departureTime = Date(70, 0, 1, 15, 42, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
@@ -330,8 +325,6 @@ class StopTimeEntityTest {
                 tripId = 113108347,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                //departureTime = Date(70, 0, 1, 15, 40, 15),
                 stopId = 35211,
                 stopSequence = 22
             )
@@ -340,8 +333,6 @@ class StopTimeEntityTest {
                 tripId = 113108518,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                //departureTime = Date(70, 0, 1, 15, 42, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
@@ -350,8 +341,6 @@ class StopTimeEntityTest {
                 tripId = 113108917,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                //departureTime = Date(70, 0, 1, 15, 40, 15),
                 stopId = 35211,
                 stopSequence = 22
             )
@@ -360,8 +349,6 @@ class StopTimeEntityTest {
                 tripId = 113109247,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                //departureTime = Date(70, 0, 1, 15, 41, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
@@ -370,8 +357,6 @@ class StopTimeEntityTest {
                 tripId = 113109605,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                //departureTime = Date(70, 0, 1, 15, 41, 15),
                 stopId = 35211,
                 stopSequence = 21
             )
@@ -380,8 +365,6 @@ class StopTimeEntityTest {
                 tripId = 113109956,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                //departureTime = Date(70, 0, 1, 15, 41, 0),
                 stopId = 35212,
                 stopSequence = 1
             )
@@ -390,8 +373,6 @@ class StopTimeEntityTest {
                 tripId = 113110087,
                 arrivalTime = rightnow.time,
                 departureTime = rightnow.time,
-                //arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                //departureTime = Date(70, 0, 1, 15, 41, 15),
                 stopId = 35211,
                 stopSequence = 21
             )
@@ -407,13 +388,17 @@ class StopTimeEntityTest {
                 stopTime8
             )
 
+            rightnow.set(1970 , 0, 1, 15,40, 0)
+            val arrivalTime = rightnow.time
+            rightnow.set(1970 , 0, 1, 15,42, 0)
+            val departureTime = rightnow.time
             val cancelledTrip = stopTimeDao.getCancelledTrip(
                 "sunday",
-                Date(70, 0, 1, 15, 40),
-                Date(70, 0, 1, 15, 42),
+
+                arrivalTime, departureTime,
                 "E",
                 ridgeway
-            ) //"sunday",
+            )
             Truth.assertThat(cancelledTrip).isEqualTo(113109956)
     }
 }
