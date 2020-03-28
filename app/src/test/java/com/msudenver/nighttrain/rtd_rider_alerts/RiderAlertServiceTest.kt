@@ -35,9 +35,6 @@ class RiderAlertServiceTest {
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
         riderAlertService.processAlerts(alertData, db)
-       // val today = Date(2020,1,21)
-       // val tomorrow = Date(2020,1,22)
-
 
         val rightnow = Calendar.getInstance()
         rightnow.set(rightnow.get(Calendar.YEAR) , (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) -1), 0, 0)
@@ -65,7 +62,6 @@ class RiderAlertServiceTest {
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
 
-        //inject calendar (FRI/SAT)
         val calendar1 = CalendarEntity(id="FR", monday = 0, tuesday = 0, wednesday = 0, thursday = 0, friday = 1, saturday = 0, sunday = 0)
         val calendar3 = CalendarEntity(id="SA", monday = 0, tuesday = 0, wednesday = 0, thursday = 0, friday = 0, saturday = 1, sunday = 0)
         db.calendarDao().insertAll(calendar1,calendar3)
@@ -136,10 +132,6 @@ class RiderAlertServiceTest {
     @Test
     fun testDownloadAlerts() {
         val riderAlertService = RiderAlertService()
-        /*val requestListener = mock(RequestQueue::class.java)
-        val mNetwork = mock(Network::class.java)
-        val mDelivery = mock(ResponseDelivery::class.java)
-        val request = RequestQueue(NoCache(), mNetwork, 0, mDelivery)*/
         val request = mock(RequestQueue::class.java)
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()

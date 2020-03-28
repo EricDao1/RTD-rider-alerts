@@ -45,9 +45,6 @@ class CancelledTripEntityTest {
     @Test
     fun deleteDuplicateRiderAlerts() {
 
-        //val calendar = Date(70,0,1)
-        //val calendar2 = Date(70,0,2)
-
         val rightnow = Calendar.getInstance()
 
         rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH )), 0,0)
