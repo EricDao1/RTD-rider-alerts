@@ -47,7 +47,9 @@ class RiderAlertServiceTest {
             "February 21, 2020 3:56PM", "February 22, 2020 2:51AM")
         val rtdAlert2 = RTDAlert("Rider Alert", "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:12 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:05 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:42 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:20 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:50 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:20 am from Union Station Track 12 to Littleton / Mineral Ave Station",
             "February 22, 2020 6:35PM", "February 23, 2020 2:51AM")
-        val alertList = listOf(rtdAlert1, rtdAlert2)
+        val rtdAlert3 = RTDAlert("Rider Alert", "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:65 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:a2 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:b5 pm from Littleton / Mineral Ave Station to Union Station Track 11",
+            "February 22, 2020 6:35PM", "February 23, 2020 2:51AM")
+        val alertList = listOf(rtdAlert1, rtdAlert2, rtdAlert3)
         val alertAttribute = RTDAlertAttribute("C", "C", "C Line", "rail", alerts = alertList)
         val riderAlerts = RiderAlerts(type="alert-routes",id="C",attributes = alertAttribute)
         val alertData = RTDAlertData(data=riderAlerts)
