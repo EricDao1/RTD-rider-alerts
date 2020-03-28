@@ -19,7 +19,7 @@ import kotlinx.coroutines.*
 //https://developer.android.com/guide/components/services
 class RiderAlertService : Service() {
     private var serviceLooper: Looper? = null
-    private var serviceHandler: ServiceHandler? = null
+    private lateinit var serviceHandler: ServiceHandler
     private val tag = "riderService"
     private val url = "https://www.rtd-denver.com/api/rider-alerts/routes/" //C
 
@@ -50,14 +50,13 @@ class RiderAlertService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder? {
-        // We don't provide binding, so return null
-        return null
+        return LocalBinder() //used for testing
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int) : Int {
-        serviceHandler?.obtainMessage()?.also {msg ->
+        serviceHandler.obtainMessage()?.also {msg ->
             msg.arg1 = startId
-            serviceHandler?.sendMessage(msg)
+            serviceHandler.sendMessage(msg)
         }
         return START_STICKY
     }
@@ -79,9 +78,9 @@ class RiderAlertService : Service() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun processAlerts(response:RTDAlertData, db: RTDDatabase?) {
-        val stopTimeDao = db?.stopTimeDao()
-        val cancelDao = db?.cancelledTripDao()
+    fun processAlerts(response:RTDAlertData, db: RTDDatabase) {
+        val stopTimeDao = db.stopTimeDao()
+        val cancelDao = db.cancelledTripDao()
 
         for (trains in response.data.attributes.alerts) {
             try {
@@ -90,25 +89,28 @@ class RiderAlertService : Service() {
                 val alertStartDate = simpleDateFormat.parse(trains.startDate)
                 val cancelledTrains = RiderAlertUtils.toRTDStationTimeObj(trains.info, response.data.id)
                 for (cancelled in cancelledTrains) {
-                   val tripID = stopTimeDao?.getCancelledTrip(dayOfWeek = RiderAlertUtils.getDayOfWeek(alertStartDate),
+                    val tripID = stopTimeDao.getCancelledTrip(dayOfWeek = RiderAlertUtils.getDayOfWeek(alertStartDate),
                             startTime = Date(cancelled.startTime.time-60000),
                             endTime = Date(cancelled.startTime.time+60000),
                             startStation = cancelled.fromStation,
                             routeName = response.data.id)
-                    if(tripID!=null) {
-                        val cancelledTrip = CancelledTripEntity(
+                    val cancelledTrip = CancelledTripEntity(
                             tripId = tripID,
-                            dayDate = alertStartDate
-                        )
-                        when (cancelledTrip.tripId > 0) {
-                            true -> cancelDao?.insertAll(cancelledTrip)
-                            false -> Log.v(tag, "no trip found: input of: $cancelled")
-                        }
+                            dayDate = alertStartDate)
+                    when (cancelledTrip.tripId > 0) {
+                        true -> cancelDao.insertAll(cancelledTrip)
+                        false -> Log.v(tag, "no trip found: input of: $cancelled")
                     }
                 }
             } catch (e : ParseException) {
                 Log.d(tag, e.toString())
             }
+        }
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService() : RiderAlertService {
+            return this@RiderAlertService
         }
     }
 
