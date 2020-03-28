@@ -1,7 +1,6 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 import android.content.Context
-import android.icu.util.Calendar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -78,11 +77,16 @@ class StopTimeEntityTest {
     @Test
     fun insertRead() {
 
+        val rightnow = Calendar.getInstance()
+        rightnow.set(Calendar.MILLISECOND,0)
+
+        rightnow.set(1970 , 0, 1, 10,1, 30)
+
             val stopTime = StopTimeEntity(
                 id = 10,
                 tripId = 113107684,
-                arrivalTime = Date(70, 0, 1, 10, 1, 30),
-                departureTime = Date(70, 0, 1, 10, 1, 30),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 23043,
                 stopSequence = 8
             )
@@ -102,11 +106,12 @@ class StopTimeEntityTest {
                 serviceId = "FR",
                 directionId = 0
             )
-            val scheduledTrainExpected = ScheduledTrain()
 
+        rightnow.set(1970 , 0, 1, 10,1, 30)
+            val scheduledTrainExpected = ScheduledTrain()
             scheduledTrainExpected.routeColor = 0xF79239
             scheduledTrainExpected.routeTextColor = 0xFFFFFF
-            scheduledTrainExpected.time = Date(70, 0, 1, 10, 1, 30)
+            scheduledTrainExpected.time = rightnow.time
             scheduledTrainExpected.trainName = "C"
             scheduledTrainExpected.tripHeader = "C-Line Union Station"
 
@@ -114,11 +119,13 @@ class StopTimeEntityTest {
             tripDao.insertAll(tripEntity1)
             stopTimeDao.insertAll(stopTime)
 
+            rightnow.set(1970 , 0, 1, 10,1, 0)
+
             val scheduledTrain = stopTimeDao.getNextTrains(
                 maxResults = 1,
                 dayOfWeek = "friday",
                 station = "10th & Osage Station",
-                time = Date(70, 0, 1, 10, 1, 0)
+                time = rightnow.time
             )
             Truth.assertThat(scheduledTrain[0].time).isEqualTo(scheduledTrainExpected.time)
             Truth.assertThat(scheduledTrain[0].routeColor)
@@ -304,59 +311,68 @@ class StopTimeEntityTest {
 
             stopDao.insertAll(stop0, stop1)
 
+            val rightnow = Calendar.getInstance()
+            rightnow.set(1970 , 0, 1, 10,1, 30)
             val stopTime1 = StopTimeEntity(
                 tripId = 113107809,
-                arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                departureTime = Date(70, 0, 1, 15, 42, 0),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35212,
                 stopSequence = 1
             )
+            rightnow.set(1970 , 0, 1, 15,40, 15)
             val stopTime2 = StopTimeEntity(
                 tripId = 113108347,
-                arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                departureTime = Date(70, 0, 1, 15, 40, 15),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35211,
                 stopSequence = 22
             )
+            rightnow.set(1970 , 0, 1, 15,42, 0)
             val stopTime3 = StopTimeEntity(
                 tripId = 113108518,
-                arrivalTime = Date(70, 0, 1, 15, 42, 0),
-                departureTime = Date(70, 0, 1, 15, 42, 0),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35212,
                 stopSequence = 1
             )
+            rightnow.set(1970 , 0, 1, 15,40, 15)
             val stopTime4 = StopTimeEntity(
                 tripId = 113108917,
-                arrivalTime = Date(70, 0, 1, 15, 40, 15),
-                departureTime = Date(70, 0, 1, 15, 40, 15),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35211,
                 stopSequence = 22
             )
+            rightnow.set(1970 , 0, 1, 15,41, 0)
             val stopTime5 = StopTimeEntity(
                 tripId = 113109247,
-                arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                departureTime = Date(70, 0, 1, 15, 41, 0),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35212,
                 stopSequence = 1
             )
+            rightnow.set(1970 , 0, 1, 15,41, 15)
             val stopTime6 = StopTimeEntity(
                 tripId = 113109605,
-                arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                departureTime = Date(70, 0, 1, 15, 41, 15),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35211,
                 stopSequence = 21
             )
+            rightnow.set(1970 , 0, 1, 15,41, 0)
             val stopTime7 = StopTimeEntity(
                 tripId = 113109956,
-                arrivalTime = Date(70, 0, 1, 15, 41, 0),
-                departureTime = Date(70, 0, 1, 15, 41, 0),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35212,
                 stopSequence = 1
             )
+            rightnow.set(1970 , 0, 1, 15,41, 15)
             val stopTime8 = StopTimeEntity(
                 tripId = 113110087,
-                arrivalTime = Date(70, 0, 1, 15, 41, 15),
-                departureTime = Date(70, 0, 1, 15, 41, 15),
+                arrivalTime = rightnow.time,
+                departureTime = rightnow.time,
                 stopId = 35211,
                 stopSequence = 21
             )
@@ -372,13 +388,17 @@ class StopTimeEntityTest {
                 stopTime8
             )
 
+            rightnow.set(1970 , 0, 1, 15,40, 0)
+            val arrivalTime = rightnow.time
+            rightnow.set(1970 , 0, 1, 15,42, 0)
+            val departureTime = rightnow.time
             val cancelledTrip = stopTimeDao.getCancelledTrip(
                 "sunday",
-                Date(70, 0, 1, 15, 40),
-                Date(70, 0, 1, 15, 42),
+
+                arrivalTime, departureTime,
                 "E",
                 ridgeway
-            ) //"sunday",
+            )
             Truth.assertThat(cancelledTrip).isEqualTo(113109956)
     }
 }

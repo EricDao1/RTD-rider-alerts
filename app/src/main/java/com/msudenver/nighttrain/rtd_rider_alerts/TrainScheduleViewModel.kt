@@ -5,13 +5,12 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.security.AccessControlContext
 import java.util.*
+
 
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -40,15 +39,18 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
     fun setStationNames(station : String) {
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
-            val rightnow = Date()
-            val tomorrow = Date(rightnow.year, rightnow.month, rightnow.date + 1)//Calendar.getInstance()
-            val today = Date(rightnow.year, rightnow.month, rightnow.date) //Calendar.getInstance()
-            //today.set(today.get(Calendar.YEAR)-1900, today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH))
-            //tomorrow.set(tomorrow.get(Calendar.YEAR)-1900, tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH)+1)
-            //val nowtime = Date(70,0,0,rightnow.hours,rightnow.minutes, rightnow.seconds)
+            val rightnow = Calendar.getInstance()
+            val timerightnow = Calendar.getInstance()
+            timerightnow.set(1970, 0, 1, (rightnow.get(Calendar.HOUR_OF_DAY)-7), (rightnow.get(Calendar.MINUTE)) )
+            rightnow.set(rightnow.get(Calendar.YEAR) , (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH)), 0, 0)
+            rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH ) +1), 0,0)
+            val tomorrow = rightnow.time
+            rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) -1), 0, 0)
+            val today = rightnow.time
+
+
             var nextTrains = db.stopTimeDao().getNextTrains(
-                Date(70,0,1,rightnow.hours-7,rightnow.minutes, rightnow.seconds) ,
-                RiderAlertUtils.getDayOfWeek(Date()),
+                timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
                 station,
                 maxResults = 20
             )
