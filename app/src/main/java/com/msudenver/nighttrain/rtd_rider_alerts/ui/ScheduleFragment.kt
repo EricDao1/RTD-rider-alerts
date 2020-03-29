@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainTimeAdapter
 
-class ScheduleFragment() : Fragment() {
+class ScheduleFragment(
+    private val viewModel : TrainScheduleViewModel
+) : Fragment() {
     private var stationsList : List<String> = ArrayList()
-    private lateinit var viewModel : TrainScheduleViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +43,6 @@ class ScheduleFragment() : Fragment() {
             }
         }
 
-        viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         viewModel.stationNames.observe(requireActivity(), Observer { stations ->
             val stationsAdapter =
                 ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, stations)
