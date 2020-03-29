@@ -31,7 +31,7 @@ class TestMainActivity {
         val station = "16th & Stout Station"
         val device = UiDevice.getInstance(getInstrumentation())
         device.waitForIdle()
-        Thread.sleep(3000)
+        Thread.sleep(9000)
         onView(ViewMatchers.withId(R.id.stations_spinner))
             .perform(click())
         onView(withText(station))
@@ -39,7 +39,7 @@ class TestMainActivity {
 
         device.setOrientationRight()
         device.waitForIdle()
-        Thread.sleep(3000)
+        Thread.sleep(9000)
         onView(ViewMatchers.withId(R.id.stations_spinner))
             .check(matches(withSpinnerText(station)))
     }
