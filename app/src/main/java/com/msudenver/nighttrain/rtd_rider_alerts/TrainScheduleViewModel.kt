@@ -15,9 +15,9 @@ import java.util.*
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     val context : Context = getApplication<Application>().applicationContext
-    val stationNames : MutableLiveData<List<String>> = MutableLiveData<List<String>>()
-    val stationSelected : MutableLiveData<String> = MutableLiveData<String>()
-    val scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData<List<ScheduledTrain>>()
+    var stationNames : MutableLiveData<List<String>> = MutableLiveData<List<String>>()
+    var stationSelected : MutableLiveData<String> = MutableLiveData<String>()
+    var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData<List<ScheduledTrain>>()
 
     init {
         GlobalScope.launch {

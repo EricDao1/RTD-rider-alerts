@@ -47,8 +47,11 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility = "1.8"
-        sourceCompatibility = var
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
     }
     buildToolsVersion = '28.0.3'
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
@@ -80,16 +83,18 @@ dependencies {
 
     // espresso testing
     androidTestUtil 'com.android.support.test:orchestrator:1.1.0'
-    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
+    androidTestImplementation "androidx.test:core:$rootProject.coreVersion"
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test:rules:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:' + rootProject.espressoVersion
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:' + rootProject.uiautomatorVersion;
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiautomatorVersion"
     androidTestImplementation 'com.google.truth:truth:1.0.1'
-    //androidTestImplementation 'org.mockito:mockito-core:2.11.0'
-    //androidTestImplementation 'org.powermock:powermock-api-mockito:1.7.4'
+    debugImplementation "androidx.fragment:fragment-testing:$rootProject.fragment_version"
+
+    androidTestImplementation 'org.mockito:mockito-core:2.11.0'
+    androidTestImplementation 'org.powermock:powermock-api-mockito:1.7.4'
 
     //regular testing
     testImplementation "androidx.arch.core:core-testing:2.1.0"
