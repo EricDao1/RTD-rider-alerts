@@ -15,7 +15,7 @@ import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainTimeAdapter
 
-class ScheduleFragment() : Fragment(), AdapterView.OnItemSelectedListener {
+class ScheduleFragment() : Fragment() {
     private var stationsList : List<String> = ArrayList()
     private lateinit var viewModel : TrainScheduleViewModel
 
@@ -29,7 +29,19 @@ class ScheduleFragment() : Fragment(), AdapterView.OnItemSelectedListener {
         recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         val stationsSpinner = view.findViewById<Spinner>(R.id.stations_spinner)
-        stationsSpinner.onItemSelectedListener = this
+        stationsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                // An item was selected. You can retrieve the selected item using
+                // parent.getItemAtPosition(pos)
+                if(stationsList.isNotEmpty()) {
+                    viewModel.setStationNames(stationsList[pos])
+                }
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Another interface callback
+            }
+        }
 
         viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         viewModel.stationNames.observe(requireActivity(), Observer { stations ->
@@ -44,19 +56,5 @@ class ScheduleFragment() : Fragment(), AdapterView.OnItemSelectedListener {
             recyclerView.adapter = adapter
         })
         return view
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        Log.v(tag, "in onItemSelected")
-        if(stationsList.isNotEmpty()) {
-            Log.v(tag, "setting pos")
-            viewModel.setStationNames(stationsList[pos])
-        }
-
-    }
-    override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
     }
 }
