@@ -19,12 +19,12 @@ class TestMainActivity {
     @get:Rule
     val activityScenarioRule : ActivityScenarioRule<MainActivity> =
         ActivityScenarioRule(MainActivity::class.java)
-
+/*
     @Test
     fun selectStation() {
         onView(ViewMatchers.withId(R.id.stations_spinner))
             .perform(click())
-    }
+    }*/
 
     @Test
     fun onRotateKeepValues() {
@@ -32,6 +32,7 @@ class TestMainActivity {
         val device = UiDevice.getInstance(getInstrumentation())
         device.waitForIdle()
         Thread.sleep(3000)
+        device.waitForIdle()
         onView(ViewMatchers.withId(R.id.stations_spinner))
             .perform(click())
         onView(withText(station))
