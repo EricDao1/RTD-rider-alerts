@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.msudenver.nighttrain.rtd_rider_alerts.ui.ScheduleFragment
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel : TrainScheduleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +19,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Downloads started...", Toast.LENGTH_SHORT).show()
         }
 
-        viewModel = ViewModelProvider(this).get(TrainScheduleViewModel::class.java)
-        val scheduleFragment = ScheduleFragment(viewModel)
+        val scheduleFragment = ScheduleFragment()
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container_view, scheduleFragment)
