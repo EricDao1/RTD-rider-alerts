@@ -93,8 +93,8 @@ dependencies {
     androidTestImplementation 'com.google.truth:truth:1.0.1'
     debugImplementation "androidx.fragment:fragment-testing:$rootProject.fragment_version"
 
-    androidTestImplementation 'org.mockito:mockito-core:2.11.0'
-    androidTestImplementation 'org.powermock:powermock-api-mockito:1.7.4'
+    //androidTestImplementation 'org.mockito:mockito-core:2.11.0'
+    //androidTestImplementation 'org.powermock:powermock-api-mockito:1.7.4'
 
     //regular testing
     testImplementation "androidx.arch.core:core-testing:2.1.0"
