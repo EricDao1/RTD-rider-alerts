@@ -67,7 +67,6 @@ class RiderAlertService : Service() {
         // https://developer.android.com/training/volley/simple.html
         // https://tutorial.eyehunts.com/android/volley-android-example-json-parsing-kotlin/
 
-        //val requestQueue = Volley.newRequestQueue(applicationContext)
 
         val alertsRequest = GsonRequest(newUrl, RTDAlertData::class.java, null, Response.Listener {
                 response -> GlobalScope.launch {processAlerts(response, db)}
