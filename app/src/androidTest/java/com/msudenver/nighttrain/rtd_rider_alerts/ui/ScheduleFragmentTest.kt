@@ -24,11 +24,11 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScheduleFragmentTest {
 
+    val station = "16th & Stout"
     @Rule @JvmField val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
     fun testRotate() {
-        val station = "16th & Stout"
         activityRule.activity.theFragment.viewModel.stationNames.postValue(listOf("10th & Osagio", station))
         activityRule.activity.theFragment.viewModel.stationSelected.postValue(station)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -47,24 +47,22 @@ class ScheduleFragmentTest {
     fun testUpdateSpinnerList() {
         val scheduleFragment = ScheduleFragment()
         val spinner = Spinner(ApplicationProvider.getApplicationContext<Context>())
-        val testStation = "16th & Stout"
-        val stationList = listOf("10th & Osage", testStation)
+        val stationList = listOf("10th & Osage", station)
         scheduleFragment.stationsSpinner = spinner
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
-        scheduleFragment.updateSelection(testStation)
-        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(testStation)
+        scheduleFragment.updateSelection(station)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(station)
     }
 
     @Test
     fun testSetStationList() {
         val scheduleFragment = ScheduleFragment()
         val spinner = Spinner(ApplicationProvider.getApplicationContext<Context>())
-        val testStation = "16th & Stout"
-        val stationList = listOf("10th & Osage", testStation)
+        val stationList = listOf("10th & Osage", station)
         scheduleFragment.stationsSpinner = spinner
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
-        Truth.assertThat(scheduleFragment.stationsSpinner?.adapter?.getItem(1)).isEqualTo(testStation)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.adapter?.getItem(1)).isEqualTo(station)
     }
 }
