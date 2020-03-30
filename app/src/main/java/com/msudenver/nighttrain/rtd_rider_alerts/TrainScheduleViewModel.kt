@@ -15,24 +15,15 @@ import java.util.*
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     val context : Context = getApplication<Application>().applicationContext
-    private val _stationNames : MutableLiveData<List<String>>
-    val stationNames : LiveData<List<String>>
-        get() = _stationNames
+    var stationNames : MutableLiveData<List<String>> = MutableLiveData<List<String>>()
+    var stationSelected : MutableLiveData<String> = MutableLiveData<String>()
+    var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData<List<ScheduledTrain>>()
 
-    private val _stationSelected : MutableLiveData<String>
-    val stationSelected : LiveData<String>
-        get() = _stationSelected
-
-    val scheduledTrains : MutableLiveData<List<ScheduledTrain>> by lazy {
-        MutableLiveData<List<ScheduledTrain>>()
-    }
-
-    init  {
-        _stationSelected = MutableLiveData<String>()
-        _stationNames = MutableLiveData<List<String>>()
+    init {
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
-            _stationNames.postValue(db.stopDao().getTrainStops())
+            val stops = db.stopDao().getTrainStops()
+            stationNames.postValue(stops)
         }
     }
 
@@ -47,7 +38,6 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
             val tomorrow = rightnow.time
             rightnow.set(rightnow.get(Calendar.YEAR), (rightnow.get(Calendar.MONTH)), (rightnow.get(Calendar.DAY_OF_MONTH) -1), 0, 0)
             val today = rightnow.time
-
 
             var nextTrains = db.stopTimeDao().getNextTrains(
                 timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
@@ -65,6 +55,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
                 }
                 trip.cancelledAlert = isCancelled
             }
+            stationSelected.postValue(station)
             scheduledTrains.postValue(nextTrains)
         }
     }
