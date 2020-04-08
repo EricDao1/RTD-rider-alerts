@@ -1,10 +1,10 @@
-package com.msudenver.nighttrain.rtd_rider_alerts
+package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertUtils
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.coroutines.GlobalScope
@@ -40,7 +40,10 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
             val today = rightnow.time
 
             var nextTrains = db.stopTimeDao().getNextTrains(
-                timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
+                timerightnow.time,
+                RiderAlertUtils.getDayOfWeek(
+                    Date()
+                ),
                 station,
                 maxResults = 20
             )

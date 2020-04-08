@@ -6,6 +6,10 @@ import com.android.volley.NetworkResponse
 import com.android.volley.Response
 import com.google.common.truth.Truth
 import com.google.gson.JsonSyntaxException
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlert
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertAttribute
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertData
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RiderAlerts
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -43,12 +47,34 @@ class GsonRequestTest2 {
                 error -> Truth.assertThat(error).hasCauseThat().isInstanceOf(Exception::class.java)
         }
         val request =  GsonRequest("abcde", RTDAlertData::class.java,null,requestListener,errorListener)
-        val alert1 = RTDAlert("Rider Alert", "C line...", "March 20, 2020 6:41PM","March 21, 2020 2:51AM" )
-        val alert2 = RTDAlert("Rider Alert", "C line...2", "now", "later")
+        val alert1 = RTDAlert(
+            "Rider Alert",
+            "C line...",
+            "March 20, 2020 6:41PM",
+            "March 21, 2020 2:51AM"
+        )
+        val alert2 = RTDAlert(
+            "Rider Alert",
+            "C line...2",
+            "now",
+            "later"
+        )
         val alertList = arrayListOf<RTDAlert>(alert1, alert2)
-        val attribute = RTDAlertAttribute("E", "E","E-line", "train", alertList)
-        val data = RiderAlerts("D","C", attribute)
-        val mainAlertData = RTDAlertData(data)
+        val attribute =
+            RTDAlertAttribute(
+                "E",
+                "E",
+                "E-line",
+                "train",
+                alertList
+            )
+        val data = RiderAlerts(
+            "D",
+            "C",
+            attribute
+        )
+        val mainAlertData =
+            RTDAlertData(data)
         request.testDeliverResponse(mainAlertData)
     }
 

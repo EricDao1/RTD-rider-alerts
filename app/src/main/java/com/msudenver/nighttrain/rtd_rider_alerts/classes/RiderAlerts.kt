@@ -1,4 +1,4 @@
-package com.msudenver.nighttrain.rtd_rider_alerts
+package com.msudenver.nighttrain.rtd_rider_alerts.classes
 
 class RiderAlerts(
     var type: String = "",

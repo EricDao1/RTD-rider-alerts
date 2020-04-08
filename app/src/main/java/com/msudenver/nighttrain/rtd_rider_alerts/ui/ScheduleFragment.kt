@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.R
-import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
-import com.msudenver.nighttrain.rtd_rider_alerts.TrainTimeAdapter
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 
 class ScheduleFragment : Fragment() {
@@ -66,7 +64,10 @@ class ScheduleFragment : Fragment() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun createAdapter(scheduledTrains:List<ScheduledTrain>) {
-        val adapter = TrainTimeAdapter(scheduledTrains)
+        val adapter =
+            TrainTimeAdapter(
+                scheduledTrains
+            )
         recyclerView?.adapter = adapter
     }
 

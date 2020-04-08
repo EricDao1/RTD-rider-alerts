@@ -2,7 +2,6 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.content.Context
 import android.widget.Spinner
-import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
@@ -14,9 +13,6 @@ import androidx.test.uiautomator.UiDevice
 import com.google.common.truth.Truth
 import com.msudenver.nighttrain.rtd_rider_alerts.MainActivity
 import com.msudenver.nighttrain.rtd_rider_alerts.R
-import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
-import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
