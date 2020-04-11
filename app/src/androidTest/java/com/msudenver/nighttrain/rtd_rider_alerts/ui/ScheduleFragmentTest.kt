@@ -4,7 +4,6 @@ import android.content.Context
 import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
@@ -24,7 +23,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScheduleFragmentTest {
 
-    val station = "16th & Stout"
+    private val station = "16th & Stout"
     @Rule @JvmField val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
@@ -38,7 +37,7 @@ class ScheduleFragmentTest {
         device.setOrientationRight()
 
         Thread.sleep(3000)
-        Espresso.onView(ViewMatchers.withId(R.id.stations_spinner))
+        onView(withId(R.id.stations_spinner))
             .check(ViewAssertions.matches(ViewMatchers.withSpinnerText(station)))
     }
 
