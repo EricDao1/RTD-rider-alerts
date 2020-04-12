@@ -27,7 +27,7 @@ android {
         }
         debug {
             minifyEnabled false
-            //testCoverageEnabled true
+            testCoverageEnabled true
         }
 
     }
