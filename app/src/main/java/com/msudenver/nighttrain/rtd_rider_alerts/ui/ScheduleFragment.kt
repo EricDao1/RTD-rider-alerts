@@ -16,6 +16,7 @@ import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.TrainTimeAdapter
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
+import kotlinx.android.synthetic.main.schedule_fragment.*
 
 class ScheduleFragment : Fragment() {
     private var stationsList : List<String> = ArrayList()
@@ -53,6 +54,11 @@ class ScheduleFragment : Fragment() {
         viewModel.scheduledTrains.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
         testableContext = context
 
+        val refreshButton = view.findViewById<Button>(R.id.refresh_button)
+        refreshButton.setOnClickListener {
+            viewModel.refreshTrains()
+
+        }
         return view
     }
 
