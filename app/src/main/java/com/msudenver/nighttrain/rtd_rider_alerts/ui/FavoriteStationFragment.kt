@@ -1,13 +1,14 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.annotation.VisibleForTesting
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,9 +41,16 @@ class FavoriteStationFragment : Fragment() {
         stationViewModel.filterStations("")
 
         val searchText = view.findViewById<EditText>(R.id.search_text)
-        searchText.addTextChangedListener( {text: CharSequence?, _: Int, _: Int, after: Int ->
-            if (after > 2) stationViewModel.filterStations(text.toString()) else stationViewModel.filterStations("")}
-        )
+        searchText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(text: CharSequence, i: Int, i1: Int, after: Int) {
+                if (after > 2) stationViewModel.filterStations(text.toString()) else stationViewModel.filterStations(
+                    ""
+                )
+            }
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {} //do nothing}
+            override fun afterTextChanged(editable: Editable) {}//do nothing}
+        })
+
 
         val backButton : ImageButton = view.findViewById(R.id.back_schedule_button)
         backButton.setImageResource(R.drawable.baseline_keyboard_backspace_black_18dp)
