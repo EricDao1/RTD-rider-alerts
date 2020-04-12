@@ -8,7 +8,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.msudenver.nighttrain.rtd_rider_alerts.ui.FavoriteStationFragment
 import com.msudenver.nighttrain.rtd_rider_alerts.ui.InterfaceViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.ui.ScheduleFragment
