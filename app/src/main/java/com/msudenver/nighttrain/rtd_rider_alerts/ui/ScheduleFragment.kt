@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
+import kotlinx.android.synthetic.main.schedule_fragment.*
 
 class ScheduleFragment : Fragment() {
     private var stationsList : List<String> = ArrayList()
@@ -60,6 +61,11 @@ class ScheduleFragment : Fragment() {
         viewModel.stationSelected.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
         viewModel.scheduledTrains.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
 
+        val refreshButton = view.findViewById<Button>(R.id.refresh_button)
+        refreshButton.setOnClickListener {
+            viewModel.refreshTrains()
+
+        }
         return view
     }
 
