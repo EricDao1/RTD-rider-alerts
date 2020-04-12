@@ -14,12 +14,11 @@ class FavoriteStationViewModelTest {
 
     @Test
     fun filterStations() {
-        //val signal = CountDownLatch(1)
 
-        val fav1 = FavoriteStation("10th & Osage", true)
-        val fav3 = FavoriteStation("OS",false)
-        val fav2 = FavoriteStation("Auraria West & Colfax", false)
-        val fav4 = FavoriteStation("positive", true)
+        val fav1 = FavoriteStation(0,"10th & Osage", true)
+        val fav3 = FavoriteStation(1,"OS",false)
+        val fav2 = FavoriteStation(2,"Auraria West & Colfax", false)
+        val fav4 = FavoriteStation(3,"positive", true)
         val favList = listOf(fav1,fav2,fav3,fav4)
 
         val viewModel = FavoriteStationViewModel()
