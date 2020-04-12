@@ -1,35 +1,44 @@
 package com.msudenver.nighttrain.rtd_rider_alerts
 
 import com.google.common.truth.Truth
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlert
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertAttribute
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertData
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RiderAlerts
 import org.junit.Test
 
-import org.junit.Assert.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class RTDAlertAttributeTest {
 
     @Test
     fun testInputOutput() {
-        val riderAlert = RTDAlert(
-            "abc",
-            "xyz",
-            "bbb",
-            "ppp"
-        )
+        val riderAlert =
+            RTDAlert(
+                "abc",
+                "xyz",
+                "bbb",
+                "ppp"
+            )
         val alerts = ArrayList<RTDAlert>()
 
         alerts.add(riderAlert)
         val routeID = "dkfjkd"
-        val rtdAlert = RTDAlertAttribute(routeID,"kjfldjfl","jflkdjl","kfjldkj",
-            alerts
-        )
-        val riderAlerts = RiderAlerts (
-            "KK",
-            "LPD",
-            rtdAlert
-        )
-        val alertData = RTDAlertData(riderAlerts)
+        val rtdAlert =
+            RTDAlertAttribute(
+                routeID, "kjfldjfl", "jflkdjl", "kfjldkj",
+                alerts
+            )
+        val riderAlerts =
+            RiderAlerts(
+                "KK",
+                "LPD",
+                rtdAlert
+            )
+        val alertData =
+            RTDAlertData(
+                riderAlerts
+            )
 
         //Truth.assertThat(alerts.)
         Truth.assertThat(alertData.data.type).isEqualTo("KK")

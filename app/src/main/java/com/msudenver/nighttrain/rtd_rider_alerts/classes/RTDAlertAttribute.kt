@@ -1,6 +1,6 @@
-package com.msudenver.nighttrain.rtd_rider_alerts
+package com.msudenver.nighttrain.rtd_rider_alerts.classes
 
-import java.lang.StringBuilder
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlert
 
 class RTDAlertAttribute(
     var routeID: String = "",

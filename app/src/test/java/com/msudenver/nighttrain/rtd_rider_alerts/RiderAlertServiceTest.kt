@@ -4,18 +4,17 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.android.volley.Network
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.ResponseDelivery
-import com.android.volley.toolbox.NoCache
 import com.google.common.truth.Truth
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlert
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertAttribute
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertData
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RiderAlerts
 import com.msudenver.nighttrain.rtd_rider_alerts.db.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
@@ -25,13 +24,37 @@ class RiderAlertServiceTest {
 
     @Test
     fun processAlertsTripNotFound() {
-        val rtdAlert1 = RTDAlert(riderAlert, "C Line Trip 3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 11 other trips cancelled on Fri Feb 21 due to operator shortage.<br><br>Affected trips:<br>3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>4:34 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>6:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:19 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:21 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:51 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:21 am from Union Station Track 12 to Littleton / Mineral Ave Station",
-            "February 21, 2020 3:56PM", "February 22, 2020 2:51AM")
-        val rtdAlert2 = RTDAlert(riderAlert, "", "February 22, 2020 6:35PM", "February 23, 2020 2:51AM")
+        val rtdAlert1 =
+            RTDAlert(
+                riderAlert,
+                "C Line Trip 3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 11 other trips cancelled on Fri Feb 21 due to operator shortage.<br><br>Affected trips:<br>3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>4:34 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>6:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:19 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:21 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:51 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:21 am from Union Station Track 12 to Littleton / Mineral Ave Station",
+                "February 21, 2020 3:56PM",
+                "February 22, 2020 2:51AM"
+            )
+        val rtdAlert2 =
+            RTDAlert(
+                riderAlert,
+                "",
+                "February 22, 2020 6:35PM",
+                "February 23, 2020 2:51AM"
+            )
         val alertList = listOf(rtdAlert1, rtdAlert2)
-        val alertAttribute = RTDAlertAttribute("C", "C", "C Line", "rail", alerts = alertList)
-        val riderAlerts = RiderAlerts(type="alert-routes",id="C",attributes = alertAttribute)
-        val alertData = RTDAlertData(data=riderAlerts)
+        val alertAttribute =
+            RTDAlertAttribute(
+                "C",
+                "C",
+                "C Line",
+                "rail",
+                alerts = alertList
+            )
+        val riderAlerts =
+            RiderAlerts(
+                type = "alert-routes",
+                id = "C",
+                attributes = alertAttribute
+            )
+        val alertData =
+            RTDAlertData(data = riderAlerts)
         val riderAlertService = RiderAlertService()
         val db = Room.inMemoryDatabaseBuilder(
             context, RTDDatabase::class.java).allowMainThreadQueries().build()
@@ -48,16 +71,44 @@ class RiderAlertServiceTest {
 
     @Test
     fun processAlertsTripFound() {
-        val rtdAlert1 = RTDAlert(riderAlert, "C Line Trip 3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 11 other trips cancelled on Fri Feb 21 due to operator shortage.<br><br>Affected trips:<br>3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>4:34 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>6:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:19 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:21 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:51 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:21 am from Union Station Track 12 to Littleton / Mineral Ave Station",
-            "February 21, 2020 3:56PM", "February 22, 2020 2:51AM")
-        val rtdAlert2 = RTDAlert(riderAlert, "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:12 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:05 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:42 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:20 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:50 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:20 am from Union Station Track 12 to Littleton / Mineral Ave Station",
-            "February 22, 2020 6:35PM", "February 23, 2020 2:51AM")
-        val rtdAlert3 = RTDAlert(riderAlert, "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:65 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:a2 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:b5 pm from Littleton / Mineral Ave Station to Union Station Track 11",
-            "Junkuary aa, 2020 6:35PM", "Feckuary 99, 2020 2:51AM")
+        val rtdAlert1 =
+            RTDAlert(
+                riderAlert,
+                "C Line Trip 3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 11 other trips cancelled on Fri Feb 21 due to operator shortage.<br><br>Affected trips:<br>3:56 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>4:34 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>6:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:19 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:49 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:21 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:51 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:21 am from Union Station Track 12 to Littleton / Mineral Ave Station",
+                "February 21, 2020 3:56PM",
+                "February 22, 2020 2:51AM"
+            )
+        val rtdAlert2 =
+            RTDAlert(
+                riderAlert,
+                "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:12 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:05 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>8:42 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>9:41 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>10:20 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>11:11 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>11:50 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>12:41 am from Littleton / Mineral Ave Station to Union Station Track 11<br>1:20 am from Union Station Track 12 to Littleton / Mineral Ave Station",
+                "February 22, 2020 6:35PM",
+                "February 23, 2020 2:51AM"
+            )
+        val rtdAlert3 =
+            RTDAlert(
+                riderAlert,
+                "C Line Trip 6:35 pm from Littleton / Mineral Ave Station to Union Station Track 11 and 9 other trips cancelled on Sat Feb 22 due to operator shortage.<br><br>Affected trips:<br>6:65 pm from Littleton / Mineral Ave Station to Union Station Track 11<br>7:a2 pm from Union Station Track 12 to Littleton / Mineral Ave Station<br>8:b5 pm from Littleton / Mineral Ave Station to Union Station Track 11",
+                "Junkuary aa, 2020 6:35PM",
+                "Feckuary 99, 2020 2:51AM"
+            )
         val alertList = listOf(rtdAlert1, rtdAlert2, rtdAlert3)
-        val alertAttribute = RTDAlertAttribute("C", "C", "C Line", "rail", alerts = alertList)
-        val riderAlerts = RiderAlerts(type="alert-routes",id="C",attributes = alertAttribute)
-        val alertData = RTDAlertData(data=riderAlerts)
+        val alertAttribute =
+            RTDAlertAttribute(
+                "C",
+                "C",
+                "C Line",
+                "rail",
+                alerts = alertList
+            )
+        val riderAlerts =
+            RiderAlerts(
+                type = "alert-routes",
+                id = "C",
+                attributes = alertAttribute
+            )
+        val alertData =
+            RTDAlertData(data = riderAlerts)
         val riderAlertService = RiderAlertService()
         val clineMineral = "C-Line Mineral"
         val cLineUnion = "C-Line Union Station"

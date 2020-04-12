@@ -1,4 +1,4 @@
-package com.msudenver.nighttrain.rtd_rider_alerts
+package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,17 +38,19 @@ class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): TrainTimeAdapter.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): MyViewHolder {
 
         val view = LayoutInflater.from(parent.context).inflate(R.layout.train_time_card, parent, false)
-        return MyViewHolder(view)
+        return MyViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int {
        return myDataset.size
     }
 
-    override fun onBindViewHolder(holder: TrainTimeAdapter.MyViewHolder, p1: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, p1: Int) {
         holder.bindItems((myDataset[p1]))
     }
 

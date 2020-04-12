@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.R
-import com.msudenver.nighttrain.rtd_rider_alerts.TrainScheduleViewModel
-import com.msudenver.nighttrain.rtd_rider_alerts.TrainTimeAdapter
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.android.synthetic.main.schedule_fragment.*
 
@@ -28,6 +26,8 @@ class ScheduleFragment : Fragment() {
     var recyclerView: RecyclerView? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var testableContext : Context? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var addFavoriteStationButton : ImageButton? = null
     private val logTag = "scheduleFragment"
 
     override fun onCreateView(
@@ -36,7 +36,7 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ) : View {
         val view = inflater.inflate(R.layout.schedule_fragment, container, false)
-        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView?.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
 
         stationsSpinner = view.findViewById<Spinner>(R.id.stations_spinner)
@@ -48,11 +48,18 @@ class ScheduleFragment : Fragment() {
             }
             override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */}
         }
+
+        addFavoriteStationButton = view.findViewById<ImageButton>(R.id.add_station)
+        addFavoriteStationButton?.setOnClickListener {
+            changeToAddFavoriteStations()
+        }
+        addFavoriteStationButton?.setImageResource(R.drawable.baseline_note_add_black_18dp)
+
+        testableContext = context
         viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         viewModel.stationNames.observe(requireActivity(), Observer { stations -> updateSpinnerList(stations)})
         viewModel.stationSelected.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
         viewModel.scheduledTrains.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
-        testableContext = context
 
         val refreshButton = view.findViewById<Button>(R.id.refresh_button)
         refreshButton.setOnClickListener {
@@ -81,5 +88,11 @@ class ScheduleFragment : Fragment() {
         if(stationsList.isNotEmpty() && (stationsSpinner?.selectedItem.toString() != (selectedStation))) {
             stationsSpinner?.setSelection(stationsList.indexOf(selectedStation))
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun changeToAddFavoriteStations() {
+        val uiViewModel = ViewModelProvider(requireActivity()).get(InterfaceViewModel::class.java)
+        uiViewModel.showFavoriteStations()
     }
 }

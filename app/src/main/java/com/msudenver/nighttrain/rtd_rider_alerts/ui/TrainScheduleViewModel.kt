@@ -1,10 +1,10 @@
-package com.msudenver.nighttrain.rtd_rider_alerts
+package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertUtils
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.coroutines.GlobalScope
@@ -14,11 +14,10 @@ import java.util.*
 
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
-
     val context : Context = getApplication<Application>().applicationContext
-    var stationNames : MutableLiveData<List<String>> = MutableLiveData<List<String>>()
-    var stationSelected : MutableLiveData<String> = MutableLiveData<String>()
-    var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData<List<ScheduledTrain>>()
+    var stationNames : MutableLiveData<List<String>> = MutableLiveData()
+    var stationSelected : MutableLiveData<String> = MutableLiveData()
+    var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData()
 
     init {
         GlobalScope.launch {

@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.Volley
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.RTDAlertData
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import java.text.ParseException
@@ -77,7 +78,7 @@ class RiderAlertService : Service() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun processAlerts(response:RTDAlertData, db: RTDDatabase) {
+    fun processAlerts(response: RTDAlertData, db: RTDDatabase) {
         val stopTimeDao = db.stopTimeDao()
         val cancelDao = db.cancelledTripDao()
 
