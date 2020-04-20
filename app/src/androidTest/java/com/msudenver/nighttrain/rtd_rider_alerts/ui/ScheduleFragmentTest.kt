@@ -3,6 +3,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 import android.content.Context
 import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
+import androidx.test.annotation.UiThreadTest
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -16,6 +17,7 @@ import androidx.test.uiautomator.UiDevice
 import com.google.common.truth.Truth
 import com.msudenver.nighttrain.rtd_rider_alerts.MainActivity
 import com.msudenver.nighttrain.rtd_rider_alerts.R
+import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,6 +27,38 @@ class ScheduleFragmentTest {
 
     private val station = "16th & Stout"
     @Rule @JvmField val activityRule = ActivityTestRule(MainActivity::class.java)
+
+    @Test
+    @UiThreadTest
+    fun testCreateAdapter() {
+        val scheduledTrain1 = ScheduledTrain()
+        val scheduledTrain2 = ScheduledTrain()
+        scheduledTrain2.tripHeader = "trip222"
+        scheduledTrain1.tripHeader = "trip111"
+
+        val trainList = arrayListOf<ScheduledTrain>(scheduledTrain1, scheduledTrain2)
+        val scheduleFragment = ScheduleFragment()
+        activityRule.activity.addFragment(scheduleFragment)
+        scheduleFragment.createAdapter(trainList)
+        Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(2)
+
+    }
+
+    @Test
+    fun testCreateAdapterNull() {
+        val scheduledTrain1 = ScheduledTrain()
+        val scheduledTrain2 = ScheduledTrain()
+        scheduledTrain2.tripHeader = "trip222"
+        scheduledTrain1.tripHeader = "trip111"
+
+        val trainList = arrayListOf<ScheduledTrain>(scheduledTrain1, scheduledTrain2)
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.recyclerView = null
+        scheduleFragment.createAdapter(trainList)
+        Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(null)
+
+    }
+
 
     @Test
     fun testRotate() {
