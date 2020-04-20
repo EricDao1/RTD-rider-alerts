@@ -44,6 +44,13 @@ class ScheduleFragmentTest {
 
     }
 
+
+    @Test
+    fun testClickRefresh() {
+        onView(withId(R.id.refresh_button)).perform(click())
+
+    }
+
     @Test
     fun testCreateAdapterNull() {
         val scheduledTrain1 = ScheduledTrain()
@@ -85,6 +92,26 @@ class ScheduleFragmentTest {
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
         Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(station)
+    }
+
+    @Test
+    fun testUpdateSpinnerListNull() {
+        val scheduleFragment = ScheduleFragment()
+        val stationList = listOf("10th & Osage", station)
+        scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
+        scheduleFragment.updateSpinnerList(stationList)
+        scheduleFragment.updateSelection(station)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
+    }
+
+    @Test
+    fun testUpdateSpinnerListNullEmpty() {
+        val scheduleFragment = ScheduleFragment()
+        val stationList = ArrayList<String>()
+        scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
+        scheduleFragment.updateSpinnerList(stationList)
+        scheduleFragment.updateSelection(station)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
     }
 
     @Test

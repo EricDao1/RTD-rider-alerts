@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TrainTimeAdapter (private val myDataset: List<ScheduledTrain>) :
-        RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
+class TrainTimeAdapter (
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val myDataset: List<ScheduledTrain>
+) : RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         fun bindItems(scheduledTrain : ScheduledTrain)
