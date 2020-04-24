@@ -18,7 +18,8 @@ import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.android.synthetic.main.schedule_fragment.*
 
 class ScheduleFragment : Fragment() {
-    private var stationsList : List<String> = ArrayList()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var stationsList : List<String> = ArrayList()
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var viewModel : TrainScheduleViewModel? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -53,11 +54,16 @@ class ScheduleFragment : Fragment() {
 
         val refreshButton = view.findViewById<Button>(R.id.refresh_button)
         refreshButton.setOnClickListener {
-            viewModel?.refreshTrains()
+            refreshTrains()
         }
         return view
     }
 
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    fun refreshTrains () {
+        viewModel?.refreshTrains()
+
+    }
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateSpinnerList(stations : List<String>) {
         val stationsAdapter =
@@ -89,14 +95,20 @@ class ScheduleFragment : Fragment() {
     fun initializeRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
     }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun onSpinerItemSelected (pos:Int) {
+
+        if (stationsList.isNotEmpty()) {
+            viewModel?.setStationNames(stationsList[pos])
+
+        }
+    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun initializeStationSpinner() {
         stationsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                if (stationsList.isNotEmpty()) {
-                    viewModel?.setStationNames(stationsList[pos])
-                }
+                onSpinerItemSelected (pos)
             }
             override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */
                 val i = 0
@@ -106,8 +118,8 @@ class ScheduleFragment : Fragment() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun initializeViewModel() {
-        viewModel?.stationNames?.observe(requireActivity(), Observer { stations -> updateSpinnerList(stations)})
-        viewModel?.stationSelected?.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
-        viewModel?.scheduledTrains?.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
+        viewModel?.stationNames!!.observe(requireActivity(), Observer { stations -> updateSpinnerList(stations)})
+        viewModel?.stationSelected!!.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
+        viewModel?.scheduledTrains!!.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
     }
 }

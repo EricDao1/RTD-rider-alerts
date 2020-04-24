@@ -137,6 +137,20 @@ class ScheduleFragmentTest {
         Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
     }
     @Test
+    fun testrefreshTrainsListNull() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.viewModel = null
+        scheduleFragment.refreshTrains()
+    }
+    @Test
+    fun testOnspinerItemSelected() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.viewModel = null
+        scheduleFragment.stationsList = listOf("")
+        scheduleFragment.onSpinerItemSelected(0)
+
+    }
+    @Test
     fun testUpdateSpinnerListNullEmpty() {
         val scheduleFragment = ScheduleFragment()
         val stationList = ArrayList<String>()
