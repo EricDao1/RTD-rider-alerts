@@ -2,6 +2,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,8 +27,6 @@ class ScheduleFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var testableContext : Context? = null
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    lateinit var addFavoriteStationButton : ImageButton
     private val logTag = "scheduleFragment"
 
     override fun onCreateView(
@@ -46,14 +45,14 @@ class ScheduleFragment : Fragment() {
                    viewModel.setStationNames(stationsList[pos])
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */}
+            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */ }
         }
 
-        addFavoriteStationButton = view.findViewById<ImageButton>(R.id.add_station)
-        addFavoriteStationButton?.setOnClickListener {
+        val addFavoriteStationButton : ImageButton = view.findViewById<ImageButton>(R.id.add_station)
+        addFavoriteStationButton.setOnClickListener {
             changeToAddFavoriteStations()
         }
-        addFavoriteStationButton?.setImageResource(R.drawable.baseline_note_add_black_18dp)
+        addFavoriteStationButton.setImageResource(R.drawable.baseline_note_add_black_18dp)
 
         testableContext = context
         viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
@@ -64,7 +63,6 @@ class ScheduleFragment : Fragment() {
         val refreshButton = view.findViewById<Button>(R.id.refresh_button)
         refreshButton.setOnClickListener {
             viewModel.refreshTrains()
-
         }
         return view
     }
