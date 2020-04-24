@@ -24,7 +24,7 @@ class ScheduleFragment : Fragment() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     lateinit var stationsSpinner : Spinner
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    lateinit var recyclerView: RecyclerView
+    var recyclerView: RecyclerView? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var testableContext : Context? = null
     private val logTag = "scheduleFragment"
@@ -36,7 +36,7 @@ class ScheduleFragment : Fragment() {
     ) : View {
         val view = inflater.inflate(R.layout.schedule_fragment, container, false)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
+        initializeRecyclerView()
 
         stationsSpinner = view.findViewById<Spinner>(R.id.stations_spinner)
         stationsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -45,7 +45,9 @@ class ScheduleFragment : Fragment() {
                    viewModel.setStationNames(stationsList[pos])
                 }
             }
-            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */ }
+            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */
+                val i = 0
+            }
         }
 
         val addFavoriteStationButton : ImageButton = view.findViewById<ImageButton>(R.id.add_station)
@@ -78,7 +80,7 @@ class ScheduleFragment : Fragment() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun createAdapter(scheduledTrains:List<ScheduledTrain>) {
         val adapter = TrainTimeAdapter(scheduledTrains)
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -92,5 +94,10 @@ class ScheduleFragment : Fragment() {
     fun changeToAddFavoriteStations() {
         val uiViewModel = ViewModelProvider(requireActivity()).get(InterfaceViewModel::class.java)
         uiViewModel.showFavoriteStations()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeRecyclerView() {
+        recyclerView?.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
     }
 }

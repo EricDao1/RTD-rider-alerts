@@ -5,11 +5,9 @@ import android.widget.Spinner
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.annotation.UiThreadTest
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
@@ -21,6 +19,9 @@ import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
+import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.matcher.ViewMatchers.*
 
 @RunWith(AndroidJUnit4::class)
 class ScheduleFragmentTest {
@@ -37,6 +38,8 @@ class ScheduleFragmentTest {
         scheduledTrain1.tripHeader = "trip111"
 
         val trainList = arrayListOf<ScheduledTrain>(scheduledTrain1, scheduledTrain2)
+        Thread.sleep(250)
+
         val scheduleFragment = ScheduleFragment()
         activityRule.activity.addFragment(scheduleFragment)
         scheduleFragment.createAdapter(trainList)
@@ -48,7 +51,40 @@ class ScheduleFragmentTest {
     fun testClickRefresh() {
         onView(withId(R.id.refresh_button)).perform(click())
     }
+
+    @Test
+    @UiThreadTest
+    fun testNoClickSpinner() {
+
+        val scheduleFragment = ScheduleFragment()
+        activityRule.activity.addFragment(scheduleFragment)
+        Thread.sleep(2500)
+        scheduleFragment.stationsSpinner.onItemSelectedListener.onNothingSelected(scheduleFragment.stationsSpinner)
+
+        Thread.sleep(1000)
+        //onData(anything()).atPosition(-1).perform(ViewActions.pressBack())
+
+    }
 /*
+    @Test(expected = UninitializedPropertyAccessException::class)
+    fun preInitTest() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.stationsSpinner.gravity
+    }
+
+    @Test(expected = UninitializedPropertyAccessException::class)
+    fun preInitTest2() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.recyclerView?.isAnimating
+    }
+
+    @Test(expected = UninitializedPropertyAccessException::class)
+    fun preInitTest3() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.viewModel.context
+    }
+*/
+
     @Test
     fun testCreateAdapterNull() {
         val scheduledTrain1 = ScheduledTrain()
@@ -63,7 +99,6 @@ class ScheduleFragmentTest {
         Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(null)
 
     }
-*/
 
     @Test
     fun testRotate() {
@@ -89,7 +124,7 @@ class ScheduleFragmentTest {
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
-        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(station)
+        Truth.assertThat(scheduleFragment.stationsSpinner.selectedItem).isEqualTo(station)
     }
 /*
     @Test
@@ -110,7 +145,13 @@ class ScheduleFragmentTest {
         scheduleFragment.updateSelection(station)
         Truth.assertThat(scheduleFragment.stationsSpinner.selectedItem).isEqualTo(null)
     }
-*/
+    */
+    @Test
+    fun testNullRecyclerView() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.initializeRecyclerView()
+    }
+
     @Test
     fun testSetStationList() {
         val scheduleFragment = ScheduleFragment()
@@ -140,4 +181,5 @@ class ScheduleFragmentTest {
         Truth.assertThat(viewModel.showStations.value).isFalse()
         //confirm fragment is Schedule fragment
     }
+
 }
