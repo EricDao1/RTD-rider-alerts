@@ -44,13 +44,11 @@ class ScheduleFragmentTest {
 
     }
 
-
     @Test
     fun testClickRefresh() {
         onView(withId(R.id.refresh_button)).perform(click())
-
     }
-
+/*
     @Test
     fun testCreateAdapterNull() {
         val scheduledTrain1 = ScheduledTrain()
@@ -65,7 +63,7 @@ class ScheduleFragmentTest {
         Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(null)
 
     }
-
+*/
 
     @Test
     fun testRotate() {
@@ -93,7 +91,7 @@ class ScheduleFragmentTest {
         scheduleFragment.updateSelection(station)
         Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(station)
     }
-
+/*
     @Test
     fun testUpdateSpinnerListNull() {
         val scheduleFragment = ScheduleFragment()
@@ -103,7 +101,6 @@ class ScheduleFragmentTest {
         scheduleFragment.updateSelection(station)
         Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
     }
-
     @Test
     fun testUpdateSpinnerListNullEmpty() {
         val scheduleFragment = ScheduleFragment()
@@ -111,9 +108,9 @@ class ScheduleFragmentTest {
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
-        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
+        Truth.assertThat(scheduleFragment.stationsSpinner.selectedItem).isEqualTo(null)
     }
-
+*/
     @Test
     fun testSetStationList() {
         val scheduleFragment = ScheduleFragment()
