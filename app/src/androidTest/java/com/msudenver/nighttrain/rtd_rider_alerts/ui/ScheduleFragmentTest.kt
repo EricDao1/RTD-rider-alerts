@@ -59,7 +59,7 @@ class ScheduleFragmentTest {
         val scheduleFragment = ScheduleFragment()
         activityRule.activity.addFragment(scheduleFragment)
         Thread.sleep(2500)
-        scheduleFragment.stationsSpinner.onItemSelectedListener.onNothingSelected(scheduleFragment.stationsSpinner)
+        scheduleFragment.stationsSpinner?.onItemSelectedListener?.onNothingSelected(scheduleFragment.stationsSpinner)
 
         Thread.sleep(1000)
         //onData(anything()).atPosition(-1).perform(ViewActions.pressBack())
@@ -124,9 +124,9 @@ class ScheduleFragmentTest {
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
-        Truth.assertThat(scheduleFragment.stationsSpinner.selectedItem).isEqualTo(station)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(station)
     }
-/*
+
     @Test
     fun testUpdateSpinnerListNull() {
         val scheduleFragment = ScheduleFragment()
@@ -143,11 +143,25 @@ class ScheduleFragmentTest {
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
-        Truth.assertThat(scheduleFragment.stationsSpinner.selectedItem).isEqualTo(null)
+        Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
     }
-    */
+
     @Test
     fun testNullRecyclerView() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.recyclerView = null
+        scheduleFragment.initializeRecyclerView()
+    }
+
+    @Test
+    fun testNullSpinner() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.stationsSpinner=null
+        scheduleFragment.initializeStationSpinner()
+    }
+
+    @Test
+    fun testNullViewModel() {
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.initializeRecyclerView()
     }
