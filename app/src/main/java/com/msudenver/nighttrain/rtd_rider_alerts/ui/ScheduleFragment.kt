@@ -104,6 +104,7 @@ class ScheduleFragment : Fragment() {
         }
     }
 
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun initializeStationSpinner() {
         stationsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

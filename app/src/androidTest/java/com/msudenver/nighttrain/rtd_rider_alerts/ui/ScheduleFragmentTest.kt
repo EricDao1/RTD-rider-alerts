@@ -52,6 +52,7 @@ class ScheduleFragmentTest {
         onView(withId(R.id.refresh_button)).perform(click())
     }
 
+
     @Test
     @UiThreadTest
     fun testNoClickSpinner() {
@@ -141,6 +142,12 @@ class ScheduleFragmentTest {
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.viewModel = null
         scheduleFragment.refreshTrains()
+    }
+    @Test
+    fun testemptylist () {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.stationsList = listOf()
+        scheduleFragment.onSpinerItemSelected(0)
     }
     @Test
     fun testOnspinerItemSelected() {
