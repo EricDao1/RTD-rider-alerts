@@ -15,8 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TrainTimeAdapter (
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val myDataset: List<ScheduledTrain>
+    private val myDataset: List<ScheduledTrain>
 ) : RecyclerView.Adapter<TrainTimeAdapter.MyViewHolder>() {
     class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
