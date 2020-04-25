@@ -2,9 +2,11 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertUtils
+import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.coroutines.GlobalScope
@@ -70,25 +72,30 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
                     maxResults = 20
                 )
                 val cancelledTrains = db.cancelledTripDao().getTrainsForToday(today, tomorrow)
-                for (trip in nextTrains) {
-                    var isCancelled = 0
-                    for (cancelledTrain in cancelledTrains) {
-                        if (cancelledTrain.tripId == trip.tripID) {
-                            isCancelled = 1
-                            break
-                        }
-                    }
-                    trip.cancelledAlert = isCancelled
-                }
-                scheduledTrains.postValue(nextTrains)
+                val nextCancelledTrains = getNextCancelledTrains(nextTrains,cancelledTrains)
+                scheduledTrains.postValue(nextCancelledTrains)
             }
         }
     }
-    fun setStationNames(station : String) {
 
+    fun setStationNames(station : String) {
         stationSelected.postValue(station)
         refreshTrains()
+    }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getNextCancelledTrains(nextTrains : List<ScheduledTrain>, cancelledTrains : List<CancelledTripEntity>) : List<ScheduledTrain> {
+        for (trip in nextTrains) {
+            var isCancelled = 0
+            for (cancelledTrain in cancelledTrains) {
+                if (cancelledTrain.tripId == trip.tripID) {
+                    isCancelled = 1
+                    break
+                }
+            }
+            trip.cancelledAlert = isCancelled
+        }
+        return nextTrains
     }
 
 }
