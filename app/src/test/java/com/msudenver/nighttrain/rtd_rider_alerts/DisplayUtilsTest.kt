@@ -3,7 +3,6 @@ package com.msudenver.nighttrain.rtd_rider_alerts
 import android.graphics.Color
 import com.google.common.truth.Truth
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
-import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
 

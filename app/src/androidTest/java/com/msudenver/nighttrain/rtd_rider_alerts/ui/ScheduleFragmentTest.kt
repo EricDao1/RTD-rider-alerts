@@ -44,7 +44,6 @@ class ScheduleFragmentTest {
         activityRule.activity.addFragment(scheduleFragment)
         scheduleFragment.createAdapter(trainList)
         Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(2)
-
     }
 
     @Test
@@ -56,35 +55,15 @@ class ScheduleFragmentTest {
     @Test
     @UiThreadTest
     fun testNoClickSpinner() {
-
         val scheduleFragment = ScheduleFragment()
         activityRule.activity.addFragment(scheduleFragment)
-        Thread.sleep(2500)
+        Thread.sleep(250)
         scheduleFragment.stationsSpinner?.onItemSelectedListener?.onNothingSelected(scheduleFragment.stationsSpinner)
 
-        Thread.sleep(1000)
+        Thread.sleep(250)
         //onData(anything()).atPosition(-1).perform(ViewActions.pressBack())
 
     }
-/*
-    @Test(expected = UninitializedPropertyAccessException::class)
-    fun preInitTest() {
-        val scheduleFragment = ScheduleFragment()
-        scheduleFragment.stationsSpinner.gravity
-    }
-
-    @Test(expected = UninitializedPropertyAccessException::class)
-    fun preInitTest2() {
-        val scheduleFragment = ScheduleFragment()
-        scheduleFragment.recyclerView?.isAnimating
-    }
-
-    @Test(expected = UninitializedPropertyAccessException::class)
-    fun preInitTest3() {
-        val scheduleFragment = ScheduleFragment()
-        scheduleFragment.viewModel.context
-    }
-*/
 
     @Test
     fun testCreateAdapterNull() {
@@ -98,7 +77,6 @@ class ScheduleFragmentTest {
         scheduleFragment.recyclerView = null
         scheduleFragment.createAdapter(trainList)
         Truth.assertThat(scheduleFragment.recyclerView?.adapter?.itemCount).isEqualTo(null)
-
     }
 
     @Test
@@ -138,19 +116,19 @@ class ScheduleFragmentTest {
         Truth.assertThat(scheduleFragment.stationsSpinner?.selectedItem).isEqualTo(null)
     }
     @Test
-    fun testrefreshTrainsListNull() {
+    fun testRefreshTrainsListNull() {
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.viewModel = null
         scheduleFragment.refreshTrains()
     }
     @Test
-    fun testemptylist () {
+    fun testEmptyList () {
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.stationsList = listOf()
         scheduleFragment.onSpinerItemSelected(0)
     }
     @Test
-    fun testOnspinerItemSelected() {
+    fun testOnSpinnerItemSelected() {
         val scheduleFragment = ScheduleFragment()
         scheduleFragment.viewModel = null
         scheduleFragment.stationsList = listOf("")
