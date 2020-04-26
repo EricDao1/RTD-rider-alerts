@@ -2,6 +2,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,17 +18,16 @@ import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
 import kotlinx.android.synthetic.main.schedule_fragment.*
 
 class ScheduleFragment : Fragment() {
-    private var stationsList : List<String> = ArrayList()
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    lateinit var viewModel : TrainScheduleViewModel
+    var stationsList : List<String> = ArrayList()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var viewModel : TrainScheduleViewModel? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var stationsSpinner : Spinner? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var recyclerView: RecyclerView? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var testableContext : Context? = null
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    var addFavoriteStationButton : ImageButton? = null
     private val logTag = "scheduleFragment"
 
     override fun onCreateView(
@@ -37,38 +37,33 @@ class ScheduleFragment : Fragment() {
     ) : View {
         val view = inflater.inflate(R.layout.schedule_fragment, container, false)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView?.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
+        initializeRecyclerView()
 
         stationsSpinner = view.findViewById<Spinner>(R.id.stations_spinner)
-        stationsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                if (stationsList.isNotEmpty()) {
-                   viewModel.setStationNames(stationsList[pos])
-                }
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */}
-        }
+        initializeStationSpinner()
 
-        addFavoriteStationButton = view.findViewById<ImageButton>(R.id.add_station)
-        addFavoriteStationButton?.setOnClickListener {
+        val addFavoriteStationButton : ImageButton = view.findViewById<ImageButton>(R.id.add_station)
+        addFavoriteStationButton.setOnClickListener {
             changeToAddFavoriteStations()
         }
-        addFavoriteStationButton?.setImageResource(R.drawable.baseline_note_add_black_18dp)
+        addFavoriteStationButton.setImageResource(R.drawable.baseline_note_add_black_18dp)
 
         testableContext = context
         viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
-        viewModel.stationNames.observe(requireActivity(), Observer { stations -> updateSpinnerList(stations)})
-        viewModel.stationSelected.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
-        viewModel.scheduledTrains.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
+        initializeViewModel()
 
         val refreshButton = view.findViewById<Button>(R.id.refresh_button)
         refreshButton.setOnClickListener {
-            viewModel.refreshTrains()
-
+            refreshTrains()
         }
         return view
     }
 
+    @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
+    fun refreshTrains () {
+        viewModel?.refreshTrains()
+
+    }
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateSpinnerList(stations : List<String>) {
         val stationsAdapter =
@@ -94,5 +89,38 @@ class ScheduleFragment : Fragment() {
     fun changeToAddFavoriteStations() {
         val uiViewModel = ViewModelProvider(requireActivity()).get(InterfaceViewModel::class.java)
         uiViewModel.showFavoriteStations()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeRecyclerView() {
+        recyclerView?.layoutManager = LinearLayoutManager(testableContext, RecyclerView.VERTICAL, false)
+    }
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun onSpinerItemSelected (pos:Int) {
+
+        if (stationsList.isNotEmpty()) {
+            viewModel?.setStationNames(stationsList[pos])
+
+        }
+    }
+
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeStationSpinner() {
+        stationsSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                onSpinerItemSelected (pos)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */
+                val i = 0
+            }
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeViewModel() {
+        viewModel?.stationNames!!.observe(requireActivity(), Observer { stations -> updateSpinnerList(stations)})
+        viewModel?.stationSelected!!.observe(requireActivity(), Observer {selectedStation -> updateSelection(selectedStation)})
+        viewModel?.scheduledTrains!!.observe(requireActivity(), Observer { scheduledTrains -> createAdapter(scheduledTrains) })
     }
 }

@@ -19,7 +19,10 @@ import com.msudenver.nighttrain.rtd_rider_alerts.classes.FavoriteStation
 
 class FavoriteStationFragment : Fragment() {
     //just display
-    private var stationRecyclerView : RecyclerView? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var stationRecyclerView : RecyclerView? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var searchText : EditText? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,8 +31,7 @@ class FavoriteStationFragment : Fragment() {
     ) : View {
         val view = inflater.inflate(R.layout.fragment_favorite_station, container, false)
         stationRecyclerView = view.findViewById<RecyclerView>(R.id.fav_station_recycler)
-
-        stationRecyclerView?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        initializeRecyclerView()
 
         val fav1 = FavoriteStation(0,"10th & Osage", true)
         val fav2 = FavoriteStation(1,"Auraria West & Colfax", false)
@@ -40,19 +42,10 @@ class FavoriteStationFragment : Fragment() {
         stationViewModel.filteredStationNames.observe(requireActivity(), Observer {s -> updateAdapter(s) } )
         stationViewModel.filterStations("")
 
-        val searchText = view.findViewById<EditText>(R.id.search_text)
-        searchText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(text: CharSequence, i: Int, i1: Int, after: Int) {
-                if (after > 2) stationViewModel.filterStations(text.toString()) else stationViewModel.filterStations(
-                    ""
-                )
-            }
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {} //do nothing}
-            override fun afterTextChanged(editable: Editable) {}//do nothing}
-        })
+        searchText = view.findViewById<EditText>(R.id.search_text)
+        initializeSearchText(stationViewModel)
 
-
-        val backButton : ImageButton = view.findViewById(R.id.back_schedule_button)
+        val backButton : ImageButton = view.findViewById<ImageButton>(R.id.back_schedule_button)
         backButton.setImageResource(R.drawable.baseline_keyboard_backspace_black_18dp)
         backButton.setOnClickListener { leaveView() }
 
@@ -69,5 +62,26 @@ class FavoriteStationFragment : Fragment() {
     fun updateAdapter(stations: List<FavoriteStation>) {
         val adapter = StationPickerAdapter(stations)
         stationRecyclerView?.adapter = adapter
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeRecyclerView() {
+        stationRecyclerView?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeSearchText(stationViewModel : FavoriteStationViewModel) {
+        searchText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(text: CharSequence, i: Int, i1: Int, after: Int) {
+                stationViewModel.filterStations(getFilterText(text.toString(),after))
+            }
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {} //do nothing}
+            override fun afterTextChanged(editable: Editable) {}//do nothing}
+        })
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getFilterText(possibleString : String, after : Int) : String {
+        return if (after > 2) possibleString else ""
     }
 }
