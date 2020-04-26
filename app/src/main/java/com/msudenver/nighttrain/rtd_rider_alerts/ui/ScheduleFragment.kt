@@ -111,9 +111,7 @@ class ScheduleFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 onSpinerItemSelected (pos)
             }
-            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */
-                val i = 0
-            }
+            override fun onNothingSelected(parent: AdapterView<*>) { /* do nothing */ }
         }
     }
 

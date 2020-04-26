@@ -27,6 +27,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 class ScheduleFragmentTest {
 
     private val station = "16th & Stout"
+    private val station2 = "10th & Osage"
     @Rule @JvmField val activityRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
@@ -98,7 +99,7 @@ class ScheduleFragmentTest {
     fun testUpdateSpinnerList() {
         val scheduleFragment = ScheduleFragment()
         val spinner = Spinner(ApplicationProvider.getApplicationContext<Context>())
-        val stationList = listOf("10th & Osage", station)
+        val stationList = listOf(station2, station)
         scheduleFragment.stationsSpinner = spinner
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
@@ -109,7 +110,7 @@ class ScheduleFragmentTest {
     @Test
     fun testUpdateSpinnerListNull() {
         val scheduleFragment = ScheduleFragment()
-        val stationList = listOf("10th & Osage", station)
+        val stationList = listOf(station2, station)
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
         scheduleFragment.updateSelection(station)
@@ -169,7 +170,7 @@ class ScheduleFragmentTest {
     fun testSetStationList() {
         val scheduleFragment = ScheduleFragment()
         val spinner = Spinner(ApplicationProvider.getApplicationContext<Context>())
-        val stationList = listOf("10th & Osage", station)
+        val stationList = listOf(station2, station)
         scheduleFragment.stationsSpinner = spinner
         scheduleFragment.testableContext = ApplicationProvider.getApplicationContext()
         scheduleFragment.updateSpinnerList(stationList)
