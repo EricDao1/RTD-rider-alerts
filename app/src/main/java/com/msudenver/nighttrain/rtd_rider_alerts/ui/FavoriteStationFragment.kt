@@ -33,14 +33,8 @@ class FavoriteStationFragment : Fragment() {
         stationRecyclerView = view.findViewById<RecyclerView>(R.id.fav_station_recycler)
         initializeRecyclerView()
 
-        val fav1 = FavoriteStation(0,"10th & Osage", true)
-        val fav2 = FavoriteStation(1,"Auraria West & Colfax", false)
-        val favList = listOf(fav1,fav2)
-
         val stationViewModel = ViewModelProvider(requireActivity()).get(FavoriteStationViewModel::class.java)
-        stationViewModel.stationNames = favList
         stationViewModel.filteredStationNames.observe(requireActivity(), Observer {s -> updateAdapter(s) } )
-        stationViewModel.filterStations("")
 
         searchText = view.findViewById<EditText>(R.id.search_text)
         initializeSearchText(stationViewModel)
@@ -60,7 +54,11 @@ class FavoriteStationFragment : Fragment() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateAdapter(stations: List<FavoriteStation>) {
-        val adapter = StationPickerAdapter(stations)
+        val viewModel = ViewModelProvider(requireActivity()).get(FavoriteStationViewModel::class.java)
+        fun update(id:Int, value:Boolean) {
+            viewModel.updateValue(id,value)
+        }
+        val adapter = StationPickerAdapter(stations, ::update)
         stationRecyclerView?.adapter = adapter
     }
 

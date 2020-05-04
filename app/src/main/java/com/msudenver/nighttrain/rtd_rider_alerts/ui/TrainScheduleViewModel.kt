@@ -2,6 +2,7 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +25,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
     init {
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
-            val stops = db.stopDao().getTrainStops()
+            val stops = db.favoriteStationDao().getFavoriteStations()
             stationNames.postValue(stops)
         }
     }
@@ -59,12 +60,9 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
             rightnow.set(
                 rightnow.get(Calendar.YEAR),
                 (rightnow.get(Calendar.MONTH)),
-                (rightnow.get(Calendar.DAY_OF_MONTH) - 1),
-                0,
-                0
+                (rightnow.get(Calendar.DAY_OF_MONTH) - 1)
             )
             val today = rightnow.time
-
             stationSelected.value?.let {
                 var nextTrains = db.stopTimeDao().getNextTrains(
                     timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
@@ -79,7 +77,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun setStationNames(station : String) {
-        stationSelected.postValue(station)
+        stationSelected.value = station
         refreshTrains()
     }
 

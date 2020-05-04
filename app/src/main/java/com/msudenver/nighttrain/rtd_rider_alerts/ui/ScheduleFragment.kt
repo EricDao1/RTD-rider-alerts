@@ -62,8 +62,8 @@ class ScheduleFragment : Fragment() {
     @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
     fun refreshTrains () {
         viewModel?.refreshTrains()
-
     }
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateSpinnerList(stations : List<String>) {
         val stationsAdapter =

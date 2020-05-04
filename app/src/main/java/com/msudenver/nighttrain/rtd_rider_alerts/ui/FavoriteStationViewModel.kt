@@ -1,16 +1,25 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.msudenver.nighttrain.rtd_rider_alerts.classes.FavoriteStation
+import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class FavoriteStationViewModel() : ViewModel() {
+class FavoriteStationViewModel(application: Application) : AndroidViewModel(application) {
+    private val context : Context = getApplication<Application>().applicationContext
     var stationNames : List<FavoriteStation> = ArrayList()
     var filteredStationNames : MutableLiveData<List<FavoriteStation>> = MutableLiveData()
 
     init {
-        // TODO get stations favorite status from db???
+        GlobalScope.launch {
+            val db = RTDDatabase.invoke(context)
+            stationNames = db.favoriteStationDao().getAllStations()
+            filterStations("")
+        }
     }
 
     fun filterStations(filterText : String) {
@@ -22,6 +31,13 @@ class FavoriteStationViewModel() : ViewModel() {
             }
         }
         filteredStationNames.postValue(filteredStations)
+    }
+
+    fun updateValue(id : Int, value: Boolean) {
+        GlobalScope.launch {
+            val db = RTDDatabase.invoke(context)
+            db.favoriteStationDao().updateStationFavorite(id, value)
+        }
     }
 
 }
