@@ -1,6 +1,8 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
+import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
+import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.typeText
@@ -29,7 +31,7 @@ class FavoriteStationFragmentTest {
     fun testNullSearchText() {
         val favoriteStationFragment = FavoriteStationFragment()
         favoriteStationFragment.searchText = null
-        val viewModel = ViewModelProvider(activityRule.activity).get(FavoriteStationViewModel::class.java)
+        val viewModel = ViewModelProvider(activityRule.activity).get(TrainScheduleViewModel::class.java)
         favoriteStationFragment.initializeSearchText(viewModel)
     }
 
@@ -50,9 +52,11 @@ class FavoriteStationFragmentTest {
     }
 
     @Test
+    @UiThreadTest
     fun updateNullAdapter() {
         val favStationFragment = FavoriteStationFragment()
         favStationFragment.stationRecyclerView = null
+        activityRule.activity.addFragment(favStationFragment)
         favStationFragment.updateAdapter(listOf())
     }
 

@@ -33,7 +33,7 @@ class FavoriteStationFragment : Fragment() {
         stationRecyclerView = view.findViewById<RecyclerView>(R.id.fav_station_recycler)
         initializeRecyclerView()
 
-        val stationViewModel = ViewModelProvider(requireActivity()).get(FavoriteStationViewModel::class.java)
+        val stationViewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         stationViewModel.filteredStationNames.observe(requireActivity(), Observer {s -> updateAdapter(s) } )
 
         searchText = view.findViewById<EditText>(R.id.search_text)
@@ -54,7 +54,7 @@ class FavoriteStationFragment : Fragment() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateAdapter(stations: List<FavoriteStation>) {
-        val viewModel = ViewModelProvider(requireActivity()).get(FavoriteStationViewModel::class.java)
+        val viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         fun update(id:Int, value:Boolean) {
             viewModel.updateValue(id,value)
         }
@@ -68,7 +68,7 @@ class FavoriteStationFragment : Fragment() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun initializeSearchText(stationViewModel : FavoriteStationViewModel) {
+    fun initializeSearchText(stationViewModel : TrainScheduleViewModel) {
         searchText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(text: CharSequence, i: Int, i1: Int, after: Int) {
                 stationViewModel.filterStations(getFilterText(text.toString(),after))

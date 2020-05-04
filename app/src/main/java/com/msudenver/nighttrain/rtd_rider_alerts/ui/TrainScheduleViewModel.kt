@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertUtils
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.FavoriteStation
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
@@ -21,12 +22,34 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
     var stationNames : MutableLiveData<List<String>> = MutableLiveData()
     var stationSelected : MutableLiveData<String> = MutableLiveData()
     var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData()
+    var allStationNames : List<FavoriteStation> = ArrayList()
+    var filteredStationNames : MutableLiveData<List<FavoriteStation>> = MutableLiveData()
 
     init {
         GlobalScope.launch {
             val db = RTDDatabase.invoke(context)
             val stops = db.favoriteStationDao().getFavoriteStations()
             stationNames.postValue(stops)
+            allStationNames = db.favoriteStationDao().getAllStations()
+            filterStations("")
+        }
+    }
+
+    fun filterStations(filterText : String) {
+        var filteredStations = ArrayList<FavoriteStation>()
+        val upperFilterText = filterText.toUpperCase()
+        for(s in allStationNames) {
+            if(s.stationName.toUpperCase().contains(upperFilterText)) {
+                filteredStations.add(s)
+            }
+        }
+        filteredStationNames.postValue(filteredStations)
+    }
+
+    fun updateValue(id : Int, value: Boolean) {
+        GlobalScope.launch {
+            val db = RTDDatabase.invoke(context)
+            db.favoriteStationDao().updateStationFavorite(id, value)
         }
     }
 
