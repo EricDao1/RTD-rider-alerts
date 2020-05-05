@@ -19,6 +19,7 @@ import java.util.*
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     val context : Context = getApplication<Application>().applicationContext
+    var db : RTDDatabase = RTDDatabase.invoke(context)
     var stationNames : MutableLiveData<List<String>> = MutableLiveData()
     var stationSelected : MutableLiveData<String> = MutableLiveData()
     var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData()
@@ -27,10 +28,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
 
     init {
         GlobalScope.launch {
-            val db = RTDDatabase.invoke(context)
-            val stops = db.favoriteStationDao().getFavoriteStations()
-            stationNames.postValue(stops)
-            allStationNames = db.favoriteStationDao().getAllStations()
+            updateFavoriteStations()
             filterStations("")
         }
     }
@@ -39,17 +37,34 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
         var filteredStations = ArrayList<FavoriteStation>()
         val upperFilterText = filterText.toUpperCase()
         for(s in allStationNames) {
-            if(s.stationName.toUpperCase().contains(upperFilterText)) {
+            if(checkContains(s,upperFilterText)) {
                 filteredStations.add(s)
             }
         }
         filteredStationNames.postValue(filteredStations)
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun checkContains(s : FavoriteStation, upperFilterText: String) : Boolean {
+        return s.stationName.toUpperCase().contains(upperFilterText.toUpperCase())
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateFavoriteStations() {
+        val stops = db.favoriteStationDao().getFavoriteStations()
+        stationNames.postValue(stops)
+        allStationNames = db.favoriteStationDao().getAllStations()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateValueInternal(id : Int, value: Boolean) {
+            db.favoriteStationDao().updateStationFavorite(id, value)
+    }
+
     fun updateValue(id : Int, value: Boolean) {
         GlobalScope.launch {
-            val db = RTDDatabase.invoke(context)
-            db.favoriteStationDao().updateStationFavorite(id, value)
+            updateValueInternal(id,value)
+            updateFavoriteStations()
         }
     }
 

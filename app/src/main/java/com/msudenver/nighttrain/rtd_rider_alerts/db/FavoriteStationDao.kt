@@ -1,6 +1,7 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.db
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.msudenver.nighttrain.rtd_rider_alerts.classes.FavoriteStation
 
@@ -19,4 +20,8 @@ interface FavoriteStationDao {
 
     @Query("UPDATE FavoriteStationEntity SET is_favorite= :isFav WHERE id= :id")
     fun updateStationFavorite(id: Int, isFav: Boolean)
+
+    @Insert
+    fun insertAll(vararg trip: FavoriteStationEntity)
+
 }

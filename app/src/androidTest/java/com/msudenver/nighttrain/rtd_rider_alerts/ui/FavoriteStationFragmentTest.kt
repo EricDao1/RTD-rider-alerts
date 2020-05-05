@@ -1,10 +1,9 @@
 package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
-import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProvider
 import androidx.test.annotation.UiThreadTest
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
@@ -56,15 +55,15 @@ class FavoriteStationFragmentTest {
     fun updateNullAdapter() {
         val favStationFragment = FavoriteStationFragment()
         favStationFragment.stationRecyclerView = null
-        activityRule.activity.addFragment(favStationFragment)
-        favStationFragment.updateAdapter(listOf())
+        val viewModel = ViewModelProvider(activityRule.activity).get(TrainScheduleViewModel::class.java)
+        favStationFragment.updateAdapter(listOf(), viewModel)
     }
 
     @Test
     fun testOnTextChanged() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.waitForIdle()
-        onView(withId(R.id.add_station)).perform(ViewActions.click())
+        onView(withId(R.id.add_station)).perform(click())
         device.waitForIdle()
         onView(withId(R.id.search_text)).perform(typeText("help"))
     }
