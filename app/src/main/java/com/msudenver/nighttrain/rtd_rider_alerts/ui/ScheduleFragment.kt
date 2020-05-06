@@ -13,9 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.msudenver.nighttrain.rtd_rider_alerts.R
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
-import kotlinx.android.synthetic.main.schedule_fragment.*
 
 class ScheduleFragment : Fragment() {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -28,6 +28,8 @@ class ScheduleFragment : Fragment() {
     var recyclerView: RecyclerView? = null
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var testableContext : Context? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var refreshLayout : SwipeRefreshLayout? = null
     private val logTag = "scheduleFragment"
 
     override fun onCreateView(
@@ -48,15 +50,21 @@ class ScheduleFragment : Fragment() {
         }
         addFavoriteStationButton.setImageResource(R.drawable.baseline_note_add_black_18dp)
 
+        refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
+        initializeRefreshView()
+
         testableContext = context
         viewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
         initializeViewModel()
 
-        val refreshButton = view.findViewById<Button>(R.id.refresh_button)
-        refreshButton.setOnClickListener {
+        return view
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun initializeRefreshView() {
+        refreshLayout?.setOnRefreshListener {
             refreshTrains()
         }
-        return view
     }
 
     @VisibleForTesting (otherwise = VisibleForTesting.PRIVATE)
@@ -76,6 +84,7 @@ class ScheduleFragment : Fragment() {
     fun createAdapter(scheduledTrains:List<ScheduledTrain>) {
         val adapter = TrainTimeAdapter(scheduledTrains)
         recyclerView?.adapter = adapter
+        refreshLayout?.isRefreshing = false
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)

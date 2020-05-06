@@ -21,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.action.ViewActions.swipeDown
 import androidx.test.espresso.matcher.ViewMatchers.*
 
 @RunWith(AndroidJUnit4::class)
@@ -49,9 +50,16 @@ class ScheduleFragmentTest {
 
     @Test
     fun testClickRefresh() {
-        onView(withId(R.id.refresh_button)).perform(click())
+        onView(withId(R.id.swiperefresh)).perform(swipeDown())
     }
 
+    @Test
+    fun testNullRefresh() {
+        val scheduleFragment = ScheduleFragment()
+        scheduleFragment.refreshLayout = null
+        scheduleFragment.initializeRefreshView()
+        // make sure it doesn't crash
+    }
 
     @Test
     @UiThreadTest
@@ -85,12 +93,12 @@ class ScheduleFragmentTest {
         val viewModel = ViewModelProvider(activityRule.activity).get(TrainScheduleViewModel::class.java)
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         device.waitForIdle()
-        Thread.sleep(3000)
+        Thread.sleep(250)
         viewModel.stationNames.postValue(listOf("10th & Osagio", station))
         viewModel.stationSelected.postValue(station)
         device.setOrientationRight()
 
-        Thread.sleep(3000)
+        Thread.sleep(250)
         onView(withId(R.id.stations_spinner))
             .check(ViewAssertions.matches(ViewMatchers.withSpinnerText(station)))
     }
