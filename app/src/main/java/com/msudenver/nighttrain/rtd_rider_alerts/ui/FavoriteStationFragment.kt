@@ -31,25 +31,23 @@ class FavoriteStationFragment : Fragment() {
     ) : View {
         val view = inflater.inflate(R.layout.fragment_favorite_station, container, false)
         stationRecyclerView = view.findViewById<RecyclerView>(R.id.fav_station_recycler)
-        initializeRecyclerView()
-
-        val fav1 = FavoriteStation(0,"10th & Osage", true)
-        val fav2 = FavoriteStation(1,"Auraria West & Colfax", false)
-        val favList = listOf(fav1,fav2)
-
-        val stationViewModel = ViewModelProvider(requireActivity()).get(FavoriteStationViewModel::class.java)
-        stationViewModel.stationNames = favList
-        stationViewModel.filteredStationNames.observe(requireActivity(), Observer {s -> updateAdapter(s) } )
-        stationViewModel.filterStations("")
-
         searchText = view.findViewById<EditText>(R.id.search_text)
-        initializeSearchText(stationViewModel)
 
         val backButton : ImageButton = view.findViewById<ImageButton>(R.id.back_schedule_button)
         backButton.setImageResource(R.drawable.baseline_keyboard_backspace_black_18dp)
         backButton.setOnClickListener { leaveView() }
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val stationViewModel = ViewModelProvider(requireActivity()).get(TrainScheduleViewModel::class.java)
+        initializeRecyclerView()
+        initializeSearchText(stationViewModel)
+        stationViewModel.filteredStationNames.observe(requireActivity(), Observer {s -> updateAdapter(s, stationViewModel) } )
+        stationViewModel.filterStations("")
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -59,8 +57,11 @@ class FavoriteStationFragment : Fragment() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun updateAdapter(stations: List<FavoriteStation>) {
-        val adapter = StationPickerAdapter(stations)
+    fun updateAdapter(stations: List<FavoriteStation>, viewModel: TrainScheduleViewModel) {
+        fun update(id:Int, value:Boolean) {
+            viewModel.updateValue(id,value)
+        }
+        val adapter = StationPickerAdapter(stations, ::update)
         stationRecyclerView?.adapter = adapter
     }
 
@@ -70,7 +71,7 @@ class FavoriteStationFragment : Fragment() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun initializeSearchText(stationViewModel : FavoriteStationViewModel) {
+    fun initializeSearchText(stationViewModel : TrainScheduleViewModel) {
         searchText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(text: CharSequence, i: Int, i1: Int, after: Int) {
                 stationViewModel.filterStations(getFilterText(text.toString(),after))

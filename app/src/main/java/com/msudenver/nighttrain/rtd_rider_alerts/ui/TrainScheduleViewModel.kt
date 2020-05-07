@@ -2,10 +2,12 @@ package com.msudenver.nighttrain.rtd_rider_alerts.ui
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.msudenver.nighttrain.rtd_rider_alerts.RiderAlertUtils
+import com.msudenver.nighttrain.rtd_rider_alerts.classes.FavoriteStation
 import com.msudenver.nighttrain.rtd_rider_alerts.db.CancelledTripEntity
 import com.msudenver.nighttrain.rtd_rider_alerts.db.RTDDatabase
 import com.msudenver.nighttrain.rtd_rider_alerts.db.ScheduledTrain
@@ -17,15 +19,52 @@ import java.util.*
 class TrainScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     val context : Context = getApplication<Application>().applicationContext
+    var db : RTDDatabase = RTDDatabase.invoke(context)
     var stationNames : MutableLiveData<List<String>> = MutableLiveData()
     var stationSelected : MutableLiveData<String> = MutableLiveData()
     var scheduledTrains : MutableLiveData<List<ScheduledTrain>> = MutableLiveData()
+    var allStationNames : List<FavoriteStation> = ArrayList()
+    var filteredStationNames : MutableLiveData<List<FavoriteStation>> = MutableLiveData()
 
     init {
         GlobalScope.launch {
-            val db = RTDDatabase.invoke(context)
-            val stops = db.stopDao().getTrainStops()
-            stationNames.postValue(stops)
+            updateFavoriteStations()
+            filterStations("")
+        }
+    }
+
+    fun filterStations(filterText : String) {
+        var filteredStations = ArrayList<FavoriteStation>()
+        val upperFilterText = filterText.toUpperCase()
+        for(s in allStationNames) {
+            if(checkContains(s,upperFilterText)) {
+                filteredStations.add(s)
+            }
+        }
+        filteredStationNames.postValue(filteredStations)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun checkContains(s : FavoriteStation, upperFilterText: String) : Boolean {
+        return s.stationName.toUpperCase().contains(upperFilterText.toUpperCase())
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateFavoriteStations() {
+        val stops = db.favoriteStationDao().getFavoriteStations()
+        stationNames.postValue(stops)
+        allStationNames = db.favoriteStationDao().getAllStations()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateValueInternal(id : Int, value: Boolean) {
+            db.favoriteStationDao().updateStationFavorite(id, value)
+    }
+
+    fun updateValue(id : Int, value: Boolean) {
+        GlobalScope.launch {
+            updateValueInternal(id,value)
+            updateFavoriteStations()
         }
     }
 
@@ -59,12 +98,9 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
             rightnow.set(
                 rightnow.get(Calendar.YEAR),
                 (rightnow.get(Calendar.MONTH)),
-                (rightnow.get(Calendar.DAY_OF_MONTH) - 1),
-                0,
-                0
+                (rightnow.get(Calendar.DAY_OF_MONTH) - 1)
             )
             val today = rightnow.time
-
             stationSelected.value?.let {
                 var nextTrains = db.stopTimeDao().getNextTrains(
                     timerightnow.time, RiderAlertUtils.getDayOfWeek(Date()),
@@ -79,7 +115,7 @@ class TrainScheduleViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun setStationNames(station : String) {
-        stationSelected.postValue(station)
+        stationSelected.value = station
         refreshTrains()
     }
 

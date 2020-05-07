@@ -58,14 +58,14 @@ class RiderAlertUtils {
         fun getDayOfWeek(alertStart:Date) : String {
             var schedule = ""
 
-            when(alertStart.day) {
-                0->schedule="sunday"
-                1->schedule="monday"
-                2->schedule="tuesday"
-                3->schedule="wednesday"
-                4->schedule="thursday"
-                5->schedule="friday"
-                6->schedule="saturday"
+            schedule = when(alertStart.day) {
+                0-> "sunday"
+                1-> "monday"
+                2-> "tuesday"
+                3-> "wednesday"
+                4-> "thursday"
+                5-> "friday"
+                else-> "saturday"
             }
             return schedule
         }
