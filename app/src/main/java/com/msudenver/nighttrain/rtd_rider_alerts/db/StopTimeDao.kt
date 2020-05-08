@@ -16,7 +16,7 @@ interface StopTimeDao {
             "INNER JOIN calendarentity ON service_id=calendarentity.id " +
             "INNER JOIN routeentity ON route_id=routeentity.id " +
             "INNER JOIN stopentity as stopentity_id on stop_id=stopentity_id.id " +
-            "join StopEntity on StopEntity.id = stopentity_id.parent_station " +
+            "LEFT JOIN StopEntity on  stopentity_id.parent_station = StopEntity.id " +
             "WHERE arrival_time >= :time " +
             " AND (CASE :dayOfWeek WHEN 'sunday' THEN sunday WHEN 'monday' THEN monday " +
             "WHEN 'tuesday' THEN tuesday WHEN 'wednesday' THEN wednesday WHEN 'thursday' THEN thursday WHEN 'friday' THEN friday WHEN 'saturday' THEN saturday END) = 1" +
